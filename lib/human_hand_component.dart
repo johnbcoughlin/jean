@@ -1,4 +1,4 @@
-import "package:angular2/angular2.dart";
+import "package:angular2/angular2.dart" hide Optional;
 import "hand.dart";
 import 'package:jean/card.dart';
 import 'package:jean/player.dart';
@@ -25,9 +25,14 @@ import "util/optional.dart";
           </div>
         </div>
       </div>
+      <div class="hand-container__clear-button">
+        <button *ngIf="selectedCards.isNotEmpty"
+                (click)="onClearSelection()"
+        >Clear</button>
+      </div>
     </div>
     ''',
-    directives: const [COMMON_DIRECTIVES],
+    directives: const <dynamic>[COMMON_DIRECTIVES],
     )
 class HumanHandComponent {
   @Input() Hand hand;
@@ -38,14 +43,26 @@ class HumanHandComponent {
 
   void onSelectCard(Card card) {
     print("selected ${card.toString()}");
-    if (handleUnambiguousPlays(card)) {
+    if (selectedCards.contains(card)) {
+      selectedCards.remove(card);
       return;
     }
 
-    Optional<ScoredGroup> maybeNewGroup = maybeNewGroup(selectedCards,
-        Player.Human);
+    if (handleUnambiguousPlays(card)) {
+      print("unambiguously played on existing group");
+      return;
+    }
 
     this.selectedCards.add(card);
+    Optional<ScoredGroup> selected = maybeNewGroup(selectedCards, Player.Human);
+    if (selected.isPresent()) {
+      print("played as new group: ${selected.value}");
+      scoringMat.playNewGroup(selected.value);
+      this.selectedCards = new List();
+      return;
+    }
+
+    print("not played");
   }
 
   // Return false if we were unable to play the card
@@ -55,5 +72,9 @@ class HumanHandComponent {
       return true;
     }
     return false;
+  }
+
+  void onClearSelection() {
+    this.selectedCards = new List();
   }
 }

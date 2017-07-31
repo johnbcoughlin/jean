@@ -16,4 +16,8 @@ class Discard {
     cards.removeRange(index, cards.length + 1);
     return result;
   }
+
+  void addAll(List<Card> cards) {
+    this.cards.addAll(cards);
+  }
 }

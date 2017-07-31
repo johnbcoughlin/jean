@@ -15,4 +15,8 @@ class Optional<T> {
   Optional.empty() {
     this.value = null;
   }
+
+  bool isPresent() {
+    return value != null;
+  }
 }

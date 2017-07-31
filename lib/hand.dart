@@ -11,6 +11,10 @@ class Hand {
     this.cards.add(card);
   }
 
+  void removeCard(Card card) {
+    this.cards.remove(card);
+  }
+
   void sort() {
     cards.sort((a, b) => b.ordinal.index - a.ordinal.index);
   }

@@ -13,19 +13,28 @@ import "player.dart";
     template: '''
     <div *ngIf="game != null">
       <jean-computer-hand [hand]="game.computerHand"></jean-computer-hand>
-      <jean-scoring-mat [computer]="human"></jean-scoring-mat>
+      <jean-scoring-mat [player]="computer"
+                        [scoringMat]="game.scoringMat"
+      ></jean-scoring-mat>
       <div class="discard-and-deck-container">
-      <jean-deck [deck]="game.deck" [onDraw]="game.onDraw"></jean-deck>
+      <jean-deck [isActive]="game.activePlayer == human && game.turnState == draw"
+                 [isEmpty]="game.deck.isEmpty()"
+                 [onDraw]="game.draw"
+                 ></jean-deck>
       <jean-discard [discard]="game.discard"></jean-discard>
       </div>
-      <jean-scoring-mat [player]="human"></jean-scoring-mat>
+      <jean-scoring-mat [player]="human"
+                        [scoringMat]="game.scoringMat"
+      ></jean-scoring-mat>
       <jean-human-hand [hand]="game.humanHand"
-                       [isActive]="game.isHumanTurn"
+                       [isActive]="game.activePlayer == human && game.turnState == play"
                        [scoringMat]="game.scoringMat"
       ></jean-human-hand>
+      <button (click)="game.undo">Undo</button>
+      <button (click)="finishTurn()">Finish Turn</button>
     </div>
       ''',
-    directives: const [
+    directives: const <dynamic>[
       COMMON_DIRECTIVES,
       HumanHandComponent,
       ComputerHandComponent,
@@ -38,9 +47,20 @@ class AppComponent implements OnInit {
   Game game;
   final Player human = Player.Human;
   final Player computer = Player.Computer;
+  final TurnState draw = TurnState.Draw;
+  final TurnState play = TurnState.Play;
+  final TurnState discard = TurnState.Discard;
 
   void ngOnInit() {
     game = new Game();
     game.setup();
+  }
+
+  void onUndo() {
+    game.undo();
+  }
+
+  void finishTurn() {
+
   }
 }

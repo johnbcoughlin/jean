@@ -42,6 +42,11 @@ body {
   border: 1px solid crimson;
 }
 
+.hand-container__clear-button {
+  position: absolute;
+  right: 0px;
+}
+
 .scoring-mat-container--computer {
   position: absolute;
   top: 120px;
@@ -50,6 +55,18 @@ body {
 .scoring-mat-container--human {
   position: absolute;
   top: 400px;
+}
+
+.scoring-mat-container--flexbox {
+}
+
+.scoring-mat__group {
+  position: relative;
+}
+
+.scoring-mat__card {
+  position: absolute;
+  top: 0px;
 }
 
 .discard-and-deck-container {

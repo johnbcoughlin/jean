@@ -24,7 +24,7 @@ class Card {
     }
   }
 
-  static cardBackUrl() {
+  static String cardBackUrl() {
     return "../static/cards/backs/b1fv.bmp";
   }
 }

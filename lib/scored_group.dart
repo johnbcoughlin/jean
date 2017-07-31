@@ -4,12 +4,11 @@ import "player.dart";
 
 abstract class ScoredGroup {
   final List<ScoredCard> cards;
-  final GroupType type;
 
-  ScoredGroup.forPlayer(List<Card> cards, type, Player player) :
-        this(cards.map((c) => new ScoredCard(player, c)), type);
+  ScoredGroup.forPlayer(List<Card> cards, Player player) :
+        this(cards.map((c) => new ScoredCard(player, c)).toList());
 
-  ScoredGroup(this.cards, this.type);
+  ScoredGroup(this.cards);
 
   bool cardIsValidToAdd(Card card);
 
@@ -32,12 +31,8 @@ class OfAKind extends ScoredGroup {
   Ordinal ordinal;
 
   OfAKind(List<Card> cards, Player player) :
-        super.forPlayer(cards, GroupType.Kind, player) {
-    var count = cards
-        .map((c) => c.ordinal)
-        .toSet()
-        .length;
-    if (count != 1) {
+        super.forPlayer(cards, player) {
+    if (!validOfAKind(cards)) {
       throw new ArgumentError("invalid 3 or 4 of a kind");
     }
     this.ordinal = cards[0].ordinal;
@@ -49,7 +44,7 @@ class OfAKind extends ScoredGroup {
 }
 
 bool validOfAKind(List<Card> cards) {
-  return cards
+  return cards.length >= 3 && cards
       .map((c) => c.ordinal)
       .toSet()
       .length == 1;
@@ -57,18 +52,45 @@ bool validOfAKind(List<Card> cards) {
 
 class Run extends ScoredGroup {
   Run(List<Card> cards, Player player) :
-        super.forPlayer(cards, GroupType.Run, player);
-  // TODO(jack) validate runs
+        super.forPlayer(cards, player) {
+    if (!validRun(cards)) {
+      throw new ArgumentError("invalid run");
+    }
+  }
 
   @override
   bool cardIsValidToAdd(Card card) {
-    // TODO: implement cardIsValidToAdd
-    return true;
+    List<Card> copy = new List.from(cards.map<Card>((sc) => sc.card));
+    copy.add(card);
+    return validRun(copy);;
   }
 }
 
 bool validRun(List<Card> cards) {
-  return true;
+  int k = cards.length;
+  if (k < 3) {
+    return false;
+  }
+//  if (cards.map((c) => c.suit).toSet().length != 1) {
+//    return false;
+//  }
+  if (cards.map((c) => c.ordinal).toSet().length < k) {
+    return false;
+  }
+  List<Ordinal> ordinals = cards.map((c) => c.ordinal).toList();
+  ordinals.sort((a, b) => a.index - b.index);
+  print(ordinals);
+  // ace on the bottom
+  if (ordinals[k - 1].index - ordinals[0].index == k - 1) {
+    return true;
+  }
+  // ace on the top
+  if (ordinals[0] == Ordinal.ace && ordinals[k - 1] == Ordinal.king) {
+    if (ordinals[k - 1].index - ordinals[1].index == k - 2) {
+      return true;
+    }
+  }
+  return false;
 }
 
 class ScoredCard {

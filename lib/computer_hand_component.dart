@@ -17,7 +17,7 @@ import "player.dart";
       </div>
     </div>
     ''',
-    directives: const [COMMON_DIRECTIVES],
+    directives: const <dynamic>[COMMON_DIRECTIVES],
     )
 class ComputerHandComponent {
   @Input() Hand hand;

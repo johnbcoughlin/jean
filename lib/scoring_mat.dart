@@ -21,4 +21,8 @@ class ScoringMat {
     groups.singleWhere((g) => g.cardIsValidToAdd(card))
         .addCard(card, player);
   }
+
+  void playNewGroup(ScoredGroup group) {
+    groups.add(group);
+  }
 }

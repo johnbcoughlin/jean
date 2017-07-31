@@ -10,11 +10,27 @@ import 'package:jean/scoring_mat.dart';
     <div [class.scoring-mat-container--human]="isHuman()"
          [class.scoring-mat-container--computer]="!isHuman()"
     >
-    Scoring Mat
+      <div *ngIf="scoringMat != null" class="scoring-mat-container--flexbox">
+        <div *ngFor="let group of scoringMat.groups"
+             class="scoring-mat__group"
+        >
+          <div *ngFor="let card of group.cards; let i = index;"
+               class="scoring-mat__card"
+               [style.z-index]="i"
+               [style.left.px]="i * 18"
+               >
+               <div *ngIf="card.player == player">
+                <img [src]="card.card.imageUrl(true)"/>
+                </div>
+          </div>
+        </div>
+      </div>
     </div>
     ''',
+    directives: const <dynamic>[COMMON_DIRECTIVES],
     )
 class ScoringMatComponent {
+  @Input() ScoringMat scoringMat;
   @Input() Player player;
 
   bool isHuman() {
