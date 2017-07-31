@@ -1,0 +1,81 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+@import url(https://fonts.googleapis.com/css?family=Material+Icons);
+/* Master Styles */
+h1 {
+  color: #369;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 250%;
+}
+h2, h3 {
+  color: #444;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: lighter;
+}
+body {
+  margin: 2em;
+}
+
+.game-container {
+  position: relative;
+}
+
+.hand-container--human {
+  position: absolute;
+  top: 500px;
+}
+
+.hand-container--computer {
+  position: absolute;
+  top: 0px;
+}
+
+.hand-runner {
+  position: relative;
+}
+
+.hand-runner__card {
+  position: absolute;
+  top: 0px;
+}
+
+.human-hand__card--selected {
+  border: 1px solid crimson;
+}
+
+.scoring-mat-container--computer {
+  position: absolute;
+  top: 120px;
+}
+
+.scoring-mat-container--human {
+  position: absolute;
+  top: 400px;
+}
+
+.discard-and-deck-container {
+  position: absolute;
+  top: 200px;
+  width: 150px;
+  height: 300px;
+}
+
+.deck-container {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.discard-container {
+  position: absolute;
+  top: 0px;
+  left: 80px;
+}
+
+.discard-runner {
+  position: relative;
+}
+
+.discard-runner__card {
+  position: absolute;
+  top: 0px;
+}
