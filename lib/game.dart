@@ -35,9 +35,6 @@ class Game {
       humanHand.addCard(deck.draw().value);
       computerHand.addCard(deck.draw().value);
     }
-    discard.discard(deck.draw().value);
-    discard.discard(deck.draw().value);
-    discard.discard(deck.draw().value);
   }
 
   void draw() {

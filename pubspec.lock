@@ -235,12 +235,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.0"
-  optional:
-    description:
-      name: optional
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.2.3+1"
   package_config:
     description:
       name: package_config
