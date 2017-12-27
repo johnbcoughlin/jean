@@ -24,7 +24,7 @@ typedef void OnPickupDiscard(List<Card> cards);
     directives: const <dynamic>[COMMON_DIRECTIVES],
     )
 class DiscardComponent {
-  @Input() Discard discard;
+  @Input() DiscardPile discard;
   @Input() OnPickupDiscard onPickupDiscard;
 
   void onPickupDiscardClick(int index) {

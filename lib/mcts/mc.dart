@@ -1,34 +1,20 @@
 import 'package:jean/game.dart';
+import 'package:jean/mcts/immutable/immutable_game.dart';
 import 'package:jean/mcts/node.dart';
+import 'package:jean/mcts/pimc.dart';
 
+/**
+ * MCTS for the perfect-information possible world
+ */
 class MonteCarlo {
-  final Game game;
+  final PIGame game;
 
   MonteCarlo(this.game) {
   }
 
-  List<Node> legalMoves() {
-    switch (game.turnState) {
-      case TurnState.Draw:
-        return legalDrawMoves();
-      case TurnState.Play:
-        return legalPlayMoves();
-      case TurnState.Discard:
-        return legalDiscardMoves();
-    }
+  Move bestMove() {
+    Node currentNode = new Node("root", game);
+    return legalMoves(currentNode)[0];
   }
 
-  List<Node> possibleOutcomes
-
-  List<Node> legalDrawMoves() {
-
-  }
-
-  List<Node> legalPlayMoves() {
-
-  }
-
-  List<Node> legalDiscardMoves() {
-
-  }
 }

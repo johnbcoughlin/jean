@@ -1,13 +1,14 @@
 import "package:angular2/angular2.dart";
 import 'package:jean/card.dart';
 import 'package:jean/deck.dart';
+import 'package:jean/mcts/pimc.dart';
 
 @Component(
     selector: "jean-deck",
     template: '''
     <div class="deck-container"
          [style.cursor]="isActive ? 'default' : 'pointer'"
-         (click)="onClick"
+         (click)="onClick()"
          >
         <img *ngIf="!isEmpty" [src]="cardBackUrl"/>
     </div>
@@ -17,13 +18,13 @@ import 'package:jean/deck.dart';
     ],
 )
 class DeckComponent {
-  @Input() bool isActive;
+  @Input() bool isActive = true;
   @Input() bool isEmpty;
-  @Output() EventEmitter draw = new EventEmitter(false);
+  @Output() EventEmitter<Move> move = new EventEmitter(false);
 
   String cardBackUrl = Card.cardBackUrl();
 
   onClick() {
-    draw.emit(null);
+    move.emit(new Draw());
   }
 }

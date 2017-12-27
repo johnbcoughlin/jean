@@ -1,19 +1,21 @@
 import 'package:jean/card.dart';
+import 'package:jean/deck.dart';
 import 'package:jean/game.dart';
+import 'package:jean/mcts/pimc.dart';
 import 'package:jean/player.dart';
 import 'package:jean/scored_group.dart';
 
-class ImmutableGame {
-  final ImmutableDeck deck;
+class PIGame {
+  final PIDeck deck;
   final ImmutableScoringMat scoringMat;
-  final ImmutableHand humanHand;
-  final ImmutableHand computerHand;
+  final PIHand humanHand;
+  final PIHand computerHand;
   final ImmutableDiscard discard;
 
   final Player activePlayer;
   final TurnState turnState;
 
-  ImmutableGame(
+  PIGame(
       this.deck,
       this.scoringMat,
       this.humanHand,
@@ -21,6 +23,24 @@ class ImmutableGame {
       this.discard,
       this.activePlayer,
       this.turnState);
+
+  PIHand activeHand() {
+    return activePlayer == Player.Computer ? computerHand : humanHand;
+  }
+
+  PIGame afterMove(Move move) {
+    if (move is Draw) {
+      PIDeck deck = new PIDeck(new List.from(this.deck.cards));
+      return new PIGame(deck, scoringMat,
+          humanHand.withCards([deck.cards.removeLast()]),
+          computerHand, discard, activePlayer, turnState);
+    } else if (move is Pickup) {
+      ImmutableDiscard discard = new ImmutableDiscard(
+          new List.from(this.discard.cards));
+      return new PIGame(deck, scoringMat,
+          humanHand.withCards(), computerHand, discard, activePlayer, turnState)
+    }
+  }
 }
 
 class ImmutableDiscard {
@@ -35,36 +55,36 @@ class ImmutableDiscard {
   }
 }
 
-class ImmutableHand {
+class PIHand {
   final List<Card> cards;
 
-  ImmutableHand(this.cards);
+  PIHand(this.cards);
 
-  ImmutableHand withCards(List<Card> cards) {
+  PIHand withCards(List<Card> cards) {
     List<Card> newCards = new List.from(this.cards);
     newCards.addAll(cards);
-    return new ImmutableHand(newCards);
+    return new PIHand(newCards);
   }
 
-  ImmutableHand withoutCards(List<Card> cards) {
+  PIHand withoutCards(List<Card> cards) {
     List<Card> newCards = new List.from(this.cards);
     cards.forEach((c) => newCards.remove(c));
-    return new ImmutableHand(newCards);
+    return new PIHand(newCards);
   }
 }
 
-class ImmutableDeck {
+class PIDeck {
   final List<Card> cards;
 
-  ImmutableDeck(this.cards);
+  PIDeck(this.cards);
 
-  ImmutableDeck withoutCard(Card card) {
+  PIDeck withoutCard(Card card) {
     if (!this.cards.contains(card)) {
       throw new Error();
     }
     List<Card> newCards = new List.from(this.cards);
     newCards.remove(card);
-    return new ImmutableDeck(newCards);
+    return new PIDeck(newCards);
   }
 }
 

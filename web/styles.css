@@ -16,7 +16,7 @@ body {
 }
 
 .game-container {
-  position: relative;
+    height: 650px;
 }
 
 .hand-container--human {
@@ -58,6 +58,7 @@ body {
 }
 
 .scoring-mat-container--flexbox {
+  display: flex;
 }
 
 .scoring-mat__group {

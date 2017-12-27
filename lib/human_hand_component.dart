@@ -1,6 +1,7 @@
 import "package:angular2/angular2.dart" hide Optional;
 import "hand.dart";
 import 'package:jean/card.dart';
+import 'package:jean/mcts/pimc.dart';
 import 'package:jean/player.dart';
 import 'package:jean/scored_group.dart';
 import 'package:jean/scoring_mat.dart';
@@ -20,7 +21,7 @@ import "util/optional.dart";
                (click)="onSelectCard(card)"
           >
           <img [src]="card.imageUrl(true)"
-               [style.cursor]="isActive ? 'pointer' : 'default'"
+               [style.cursor]="(playing || discarding) ? 'pointer' : 'default'"
           />
           </div>
         </div>
@@ -36,33 +37,39 @@ import "util/optional.dart";
     )
 class HumanHandComponent {
   @Input() Hand hand;
-  @Input() bool isActive;
+  @Input() bool playing;
+  @Input() bool discarding;
   @Input() ScoringMat scoringMat;
+  @Output() EventEmitter<Move> move = new EventEmitter(false);
 
   List<Card> selectedCards = new List();
 
   void onSelectCard(Card card) {
-    print("selected ${card.toString()}");
-    if (selectedCards.contains(card)) {
-      selectedCards.remove(card);
-      return;
-    }
+    if (playing) {
+      if (selectedCards.contains(card)) {
+        selectedCards.remove(card);
+        return;
+      }
 
-    if (handleUnambiguousPlays(card)) {
-      print("unambiguously played on existing group");
-      return;
-    }
+      if (handleUnambiguousPlays(card)) {
+        print("unambiguously played on existing group");
+        return;
+      }
 
-    this.selectedCards.add(card);
-    Optional<ScoredGroup> selected = maybeNewGroup(selectedCards, Player.Human);
-    if (selected.isPresent()) {
-      print("played as new group: ${selected.value}");
-      scoringMat.playNewGroup(selected.value);
-      this.selectedCards = new List();
-      return;
-    }
+      this.selectedCards.add(card);
+      Optional<ScoredGroup> selected = maybeNewGroup(
+          selectedCards, Player.Human);
+      if (selected.isPresent()) {
+        print("played as new group: ${selected.value}");
+        move.emit(new Play(selected.value));
+        this.selectedCards = new List();
+        return;
+      }
 
-    print("not played");
+      print("not played");
+    } else if (discarding) {
+      move.emit(new Discard(card));
+    }
   }
 
   // Return false if we were unable to play the card

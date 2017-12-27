@@ -12,7 +12,7 @@ import "player.dart";
              [style.z-index]="i"
              [style.left.px]="i * 18"
              >
-          <img [src]="card.imageUrl(false)"/>
+          <img [src]="card.imageUrl(true)"/>
         </div>
       </div>
     </div>

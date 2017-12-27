@@ -10,6 +10,10 @@ class Card {
     return "${ordinal} of ${suit}";
   }
 
+  String toShortString() {
+    return ordinalToString(ordinal) + suitToString(suit);
+  }
+
   String imageUrlForPlayer(Player player) {
     return imageUrl(player == Player.Human);
   }
@@ -55,4 +59,52 @@ enum Ordinal {
   jack,
   queen,
   king
+}
+
+String ordinalToString(Ordinal ordinal) {
+  switch (ordinal) {
+    case Ordinal.ace:
+      return "A";
+    case Ordinal.two:
+      return "2";
+    case Ordinal.three:
+      return "3";
+    case Ordinal.four:
+      return "4";
+    case Ordinal.five:
+      return "5";
+    case Ordinal.six:
+      return "6";
+    case Ordinal.seven:
+      return "7";
+    case Ordinal.eight:
+      return "8";
+    case Ordinal.nine:
+      return "9";
+    case Ordinal.ten:
+      return "10";
+    case Ordinal.jack:
+      return "J";
+    case Ordinal.queen:
+      return "Q";
+    case Ordinal.king:
+      return "K";
+    default:
+      throw new Exception("unhandled Ordinal");
+  }
+}
+
+String suitToString(Suit suit) {
+  switch (suit) {
+    case Suit.clubs:
+      return "♣";
+    case Suit.diamonds:
+      return "♦";
+    case Suit.hearts:
+      return "♥";
+    case Suit.spades:
+      return "♠";
+    default:
+      throw new Exception("unhandled Suit");
+  }
 }

@@ -1,9 +1,9 @@
 import 'package:jean/card.dart';
 
-class Discard {
+class DiscardPile {
   List<Card> cards;
 
-  Discard() {
+  DiscardPile() {
     this.cards = new List();
   }
 

@@ -5,6 +5,7 @@ import "human_hand_component.dart";
 import "computer_hand_component.dart";
 import 'package:jean/deck_component.dart';
 import 'package:jean/discard_component.dart';
+import 'package:jean/mcts/pimc.dart';
 import 'package:jean/scoring_mat_component.dart';
 import "player.dart";
 
@@ -12,14 +13,15 @@ import "player.dart";
     selector: "my-app",
     template: '''
     <div *ngIf="game != null">
+      <div class="game-container">
       <jean-computer-hand [hand]="game.computerHand"></jean-computer-hand>
       <jean-scoring-mat [player]="computer"
                         [scoringMat]="game.scoringMat"
       ></jean-scoring-mat>
       <div class="discard-and-deck-container">
-      <jean-deck [isActive]="game.activePlayer == human && game.turnState == draw"
+      <jean-deck [isActive]="true"
                  [isEmpty]="game.deck.isEmpty()"
-                 [onDraw]="game.draw"
+                 (move)="onMove(\$event)"
                  ></jean-deck>
       <jean-discard [discard]="game.discard"></jean-discard>
       </div>
@@ -27,11 +29,22 @@ import "player.dart";
                         [scoringMat]="game.scoringMat"
       ></jean-scoring-mat>
       <jean-human-hand [hand]="game.humanHand"
-                       [isActive]="game.activePlayer == human && game.turnState == play"
+                       [playing]="game.activePlayer == human && game.turnState == play"
+                       [discarding]="game.activePlayer == human && game.turnState == discard"
                        [scoringMat]="game.scoringMat"
+                       (move)="onMove(\$event)"
       ></jean-human-hand>
-      <button (click)="game.undo">Undo</button>
-      <button (click)="finishTurn()">Finish Turn</button>
+      </div>
+      <div>
+      <button (click)="game.undo()">Undo</button>
+      <button (click)="finishPlay()">Finish Play</button>
+      <div>
+      {{game.activePlayer}}
+      </div>
+      <div>
+      {{game.turnState}}
+      </div>
+      </div>
     </div>
       ''',
     directives: const <dynamic>[
@@ -60,7 +73,12 @@ class AppComponent implements OnInit {
     game.undo();
   }
 
-  void finishTurn() {
+  void onMove(Move move) {
+    print(move);
+    game.handleMove(move);
+  }
 
+  void finishPlay() {
+    game.handleMove(new FinishPlay());
   }
 }

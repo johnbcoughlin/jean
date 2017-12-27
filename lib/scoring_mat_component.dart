@@ -13,6 +13,8 @@ import 'package:jean/scoring_mat.dart';
       <div *ngIf="scoringMat != null" class="scoring-mat-container--flexbox">
         <div *ngFor="let group of scoringMat.groups"
              class="scoring-mat__group"
+             [style.width.px]="group.cards.length * 18 + 72"
+             [style.height.px]="72"
         >
           <div *ngFor="let card of group.cards; let i = index;"
                class="scoring-mat__card"
