@@ -39,6 +39,10 @@ class Game {
       computerHand.addCard(deck.draw().value);
     }
     turnState = TurnState.Draw;
+    // TODO(jack) remove test code
+    activePlayer = Player.Computer;
+    new Future.delayed(const Duration(seconds: 1), () => print("moved"));
+    handleMove(new PIMC(new IIGame.fromGame(this)).selectMove());
   }
 
   void handleMove(Move move) {

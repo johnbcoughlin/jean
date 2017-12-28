@@ -12,19 +12,27 @@ class Node {
   num wins;
   num visits;
 
+  List<Move> allLegalMoves;
+  List<Move> unvisitedMoves;
+
+  /* indexed by the labels of the moves */
   Map<String, Node> children;
 
   Node(this.label, this.immutableGame) {
     this.wins = 0;
     this.visits = 1;
     this.children = new Map();
+    allLegalMoves = legalMoves(this.immutableGame);
+    unvisitedMoves = new List.from(allLegalMoves);
   }
 
   Node ucb1Maximizer() {
     double bestUpperBound = 0.0;
     Node best = null;
     children.forEach((label, child) {
-      double ucb1 = (child.wins / child.visits) +
+      int wins = immutableGame.activePlayer == Player.Computer
+          ? child.wins : child.visits - child.wins;
+      double ucb1 = (wins / child.visits) +
           sqrt(2 * log(visits) / child.visits);
       if (ucb1 > bestUpperBound) {
         best = child;
@@ -33,18 +41,51 @@ class Node {
     });
     return best;
   }
+
+  Move bestMove() {
+    num bestScore = 0.0;
+    Move bestMove = null;
+    for (Move move in allLegalMoves) {
+      Node node = children[move.label()];
+      num score = node.wins / node.visits;
+      if (score > bestScore) {
+        bestScore = score;
+        bestMove = move;
+      }
+    }
+
+    print("foo");
+    print(bestMove);
+    return bestMove;
+  }
+
+  Node randomUnvisitedChild() {
+    unvisitedMoves.shuffle();
+    Move move = unvisitedMoves.removeLast();
+    children[move.label()] =
+    new Node(move.label(), immutableGame.afterMove(move));
+    return children[move.label()];
+  }
+
+  bool get allChildrenVisited => children.length == allLegalMoves.length;
+
+  void recordVisit(bool win) {
+    visits += 1;
+    wins += (win == (immutableGame.activePlayer == Player.Computer))
+        ? 1 : 0;
+  }
 }
 
-List<Move> legalMoves(Node node) {
-  switch (node.immutableGame.turnState) {
+List<Move> legalMoves(PIGame game) {
+  switch (game.turnState) {
     case TurnState.Draw:
-      return legalDrawMoves(node.immutableGame);
+      return legalDrawMoves(game);
     case TurnState.Play:
-      return legalPlayMoves(node.immutableGame);
+      return legalPlayMoves(game);
     case TurnState.Discard:
-      return legalDiscardMoves(node.immutableGame);
+      return legalDiscardMoves(game);
     default:
-      throw new Exception("unhandled turn state ${node.immutableGame.turnState}");
+      throw new Exception("unhandled turn state ${game.turnState}");
   }
 }
 

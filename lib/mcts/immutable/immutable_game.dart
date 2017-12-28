@@ -33,14 +33,32 @@ class PIGame {
       PIDeck deck = new PIDeck(new List.from(this.deck.cards));
       return new PIGame(deck, scoringMat,
           humanHand.withCards([deck.cards.removeLast()]),
-          computerHand, discard, activePlayer, turnState);
+          computerHand, discard, activePlayer, TurnState.Play);
+
     } else if (move is Pickup) {
-      ImmutableDiscard discard = new ImmutableDiscard(
-          new List.from(this.discard.cards));
-      return new PIGame(deck, scoringMat,
-          humanHand.withCards(), computerHand, discard, activePlayer, turnState)
+
+      PIHand newHand = humanHand.withCards(
+          this.discard.cards.sublist(move.fromIndex));
+      ImmutableDiscard newDiscard = new ImmutableDiscard(
+        this.discard.cards.sublist(0, move.fromIndex));
+      return activePlayer == Player.Computer
+          ? new PIGame(deck, scoringMat, humanHand, newHand, newDiscard,
+              activePlayer, turnState)
+          : new PIGame(deck, scoringMat, newHand, computerHand, newDiscard,
+          activePlayer, TurnState.Play);
+
+    } else if (move is Play) {
+      print("played a thing!");
     }
+
+    return this;
   }
+
+  bool get terminal => humanHand.cards.isEmpty
+      || computerHand.cards.isEmpty;
+
+  // TODO scoring
+  bool get computerWin => terminal && computerHand.cards.isEmpty;
 }
 
 class ImmutableDiscard {

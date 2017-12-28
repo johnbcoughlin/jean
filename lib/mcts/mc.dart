@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:jean/game.dart';
 import 'package:jean/mcts/immutable/immutable_game.dart';
 import 'package:jean/mcts/node.dart';
@@ -13,8 +14,36 @@ class MonteCarlo {
   }
 
   Move bestMove() {
-    Node currentNode = new Node("root", game);
-    return legalMoves(currentNode)[0];
-  }
+    Node rootNode = new Node("root", this.game);
 
+    while (!rootNode.allChildrenVisited) {
+      Node currentNode = rootNode;
+      List<Node> toGatherStats = [currentNode];
+
+      // Selection
+      while (currentNode.allChildrenVisited) {
+        currentNode = currentNode.ucb1Maximizer();
+        toGatherStats.add(currentNode);
+      }
+      // Expansion
+      currentNode = currentNode.randomUnvisitedChild();
+      toGatherStats.add(currentNode);
+
+      PIGame game = currentNode.immutableGame;
+      // Simulation
+      while (game.terminal) {
+        List<Move> moves = legalMoves(game);
+        moves.shuffle();
+        game = game.afterMove(moves[0]);
+        print("simulating");
+        new Future.delayed(new Duration(milliseconds: 200), () {});
+      }
+
+      for (Node node in toGatherStats) {
+        node.recordVisit(game.computerWin);
+      }
+    }
+
+    return rootNode.bestMove();
+  }
 }
