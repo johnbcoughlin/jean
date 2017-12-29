@@ -12,38 +12,44 @@ import "player.dart";
 @Component(
     selector: "my-app",
     template: '''
-    <div *ngIf="game != null">
-      <div class="game-container">
-      <jean-computer-hand [hand]="game.computerHand"></jean-computer-hand>
-      <jean-scoring-mat [player]="computer"
-                        [scoringMat]="game.scoringMat"
-      ></jean-scoring-mat>
-      <div class="discard-and-deck-container">
-      <jean-deck [isActive]="true"
-                 [isEmpty]="game.deck.isEmpty()"
-                 (move)="onMove(\$event)"
-                 ></jean-deck>
-      <jean-discard [discard]="game.discard"></jean-discard>
-      </div>
-      <jean-scoring-mat [player]="human"
-                        [scoringMat]="game.scoringMat"
-      ></jean-scoring-mat>
-      <jean-human-hand [hand]="game.humanHand"
-                       [playing]="game.activePlayer == human && game.turnState == play"
-                       [discarding]="game.activePlayer == human && game.turnState == discard"
-                       [scoringMat]="game.scoringMat"
+    <div class="app-container">
+      <div *ngIf="game != null">
+        <div class="game-container">
+          <jean-computer-hand [hand]="game.computerHand"></jean-computer-hand>
+          <jean-scoring-mat [player]="computer"
+                            [scoringMat]="game.scoringMat"
+          ></jean-scoring-mat>
+          <div class="discard-and-deck-container">
+            <jean-deck [isActive]="true"
+                       [isEmpty]="game.deck.isEmpty()"
                        (move)="onMove(\$event)"
-      ></jean-human-hand>
+                       ></jean-deck>
+            <jean-discard [discard]="game.discard"></jean-discard>
+          </div>
+          <jean-scoring-mat [player]="human"
+                            [scoringMat]="game.scoringMat"
+          ></jean-scoring-mat>
+          <jean-human-hand [hand]="game.humanHand"
+                           [playing]="game.activePlayer == human && game.turnState == play"
+                           [discarding]="game.activePlayer == human && game.turnState == discard"
+                           [scoringMat]="game.scoringMat"
+                           (move)="onMove(\$event)"
+          ></jean-human-hand>
+        </div>
+        <div>
+          <button (click)="game.undo()">Undo</button>
+          <button (click)="finishPlay()">Finish Play</button>
+          <div>{{game.activePlayer}}</div>
+          <div>{{game.turnState}}</div>
+          <div>{{game.scoringMat.humanPoints()}} \| {{game.scoringMat.computerPoints()}}</div>
+        </div>
       </div>
       <div>
-      <button (click)="game.undo()">Undo</button>
-      <button (click)="finishPlay()">Finish Play</button>
-      <div>
-      {{game.activePlayer}}
-      </div>
-      <div>
-      {{game.turnState}}
-      </div>
+        <ul>
+        <li *ngFor="#move of game.moves">
+          {{move.label()}}
+        </li>
+        </ul>
       </div>
     </div>
       ''',

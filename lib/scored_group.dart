@@ -74,7 +74,10 @@ bool validRun(List<Card> cards) {
 //  if (cards.map((c) => c.suit).toSet().length != 1) {
 //    return false;
 //  }
-  if (cards.map((c) => c.ordinal).toSet().length < k) {
+  if (cards
+      .map((c) => c.ordinal)
+      .toSet()
+      .length < k) {
     return false;
   }
   List<Ordinal> ordinals = cards.map((c) => c.ordinal).toList();
@@ -97,6 +100,20 @@ class ScoredCard {
   final Card card;
 
   ScoredCard(this.player, this.card);
+
+  int points() {
+    switch (card.ordinal) {
+      case Ordinal.ace:
+        return 15;
+      case Ordinal.ten:
+      case Ordinal.jack:
+      case Ordinal.queen:
+      case Ordinal.king:
+        return 10;
+      default:
+        return 5;
+    }
+  }
 }
 
 enum GroupType {

@@ -16,7 +16,8 @@ class MonteCarlo {
   Move bestMove() {
     Node rootNode = new Node("root", this.game);
 
-    while (!rootNode.allChildrenVisited) {
+    int count = 0;
+    while (!rootNode.allChildrenVisited || count++ < 10) {
       Node currentNode = rootNode;
       List<Node> toGatherStats = [currentNode];
 
@@ -48,6 +49,8 @@ class MonteCarlo {
         node.recordVisit(game.computerWin);
       }
     }
+
+    print(rootNode.toJson());
 
     return rootNode.bestMove();
   }

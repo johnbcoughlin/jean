@@ -84,7 +84,8 @@ class PIGame {
       || computerHand.cards.isEmpty;
 
   // TODO scoring
-  bool get computerWin => terminal && computerHand.cards.isEmpty;
+  bool get computerWin => terminal &&
+      scoringMat.computerPoints() > scoringMat.humanPoints();
 }
 
 class ImmutableDiscard {
@@ -141,6 +142,30 @@ class ImmutableScoringMat {
     List<ImmutableScoredGroup> newGroups = new List.from(groups);
     newGroups.add(group);
     return new ImmutableScoringMat(newGroups);
+  }
+
+  int humanPoints() {
+    num score = 0;
+    for (ImmutableScoredGroup group in groups) {
+      for (ScoredCard card in group.cards) {
+        if (card.player == Player.Human) {
+          score += card.points();
+        }
+      }
+    }
+    return score;
+  }
+
+  computerPoints() {
+    num score = 0;
+    for (ImmutableScoredGroup group in groups) {
+      for (ScoredCard card in group.cards) {
+        if (card.player == Player.Computer) {
+          score += card.points();
+        }
+      }
+    }
+    return score;
   }
 }
 

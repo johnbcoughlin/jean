@@ -73,6 +73,14 @@ class Node {
     wins += (win == (immutableGame.activePlayer == Player.Computer))
         ? 1 : 0;
   }
+
+  String toJson() {
+    String children = "\n";
+    this.children.forEach((label, child) {
+      children = children + "\"${label}\": ${child.toJson()},\n";
+    });
+    return "{\n\"wins\": ${wins},\n\"visits\": ${visits}, \"children\": {${children}}\n}";
+  }
 }
 
 List<Move> legalMoves(PIGame game) {

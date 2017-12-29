@@ -25,6 +25,8 @@ class Game {
   OnPickupDiscard onPickupDiscard;
   Undo undo;
 
+  List<Move> moves = [];
+
   Game() {
     deck = new Deck();
     scoringMat = new ScoringMat();
@@ -46,6 +48,7 @@ class Game {
   }
 
   void handleMove(Move move) {
+    moves.add(move);
     if (turnState == TurnState.Draw) {
       handleDrawMove(move);
     } else if (turnState == TurnState.Play) {

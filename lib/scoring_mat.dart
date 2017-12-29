@@ -25,4 +25,28 @@ class ScoringMat {
   void playNewGroup(ScoredGroup group) {
     groups.add(group);
   }
+
+  int humanPoints() {
+    num score = 0;
+    for (ScoredGroup group in groups) {
+      for (ScoredCard card in group.cards) {
+        if (card.player == Player.Human) {
+          score += card.points();
+        }
+      }
+    }
+    return score;
+  }
+
+  computerPoints() {
+    num score = 0;
+    for (ScoredGroup group in groups) {
+      for (ScoredCard card in group.cards) {
+        if (card.player == Player.Computer) {
+          score += card.points();
+        }
+      }
+    }
+    return score;
+  }
 }
