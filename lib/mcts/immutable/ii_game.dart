@@ -34,6 +34,9 @@ class IIGame {
         new List.from(game.discard.cards));
     player = game.activePlayer;
     turnState = game.turnState;
+    scoringMat = new ImmutableScoringMat(game.scoringMat.groups
+        .map((sg) => new ImmutableScoredGroup(sg.cards))
+        .toList());
   }
 
   PIGame sample() {

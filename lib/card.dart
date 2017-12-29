@@ -61,6 +61,10 @@ enum Ordinal {
   king
 }
 
+int compare(Ordinal a, Ordinal b) {
+
+}
+
 String ordinalToString(Ordinal ordinal) {
   switch (ordinal) {
     case Ordinal.ace:

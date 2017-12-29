@@ -79,7 +79,6 @@ bool validRun(List<Card> cards) {
   }
   List<Ordinal> ordinals = cards.map((c) => c.ordinal).toList();
   ordinals.sort((a, b) => a.index - b.index);
-  print(ordinals);
   // ace on the bottom
   if (ordinals[k - 1].index - ordinals[0].index == k - 1) {
     return true;
@@ -103,4 +102,28 @@ class ScoredCard {
 enum GroupType {
   Run,
   Kind
+}
+
+List<ScoredGroup> allValidGroups(List<Card> cards, Player player) {
+  List<ScoredGroup> result = [];
+
+  // do the runs first
+  // first copy the list and sort by ordinal
+  List<Card> copy = new List.from(cards);
+  copy.sort((c1, c2) => c1.ordinal.index - c2.ordinal.index);
+  // add aces to the top
+  for (Card card in cards) {
+    if (card.ordinal == Ordinal.ace) {
+      copy.add(card);
+    }
+  }
+
+  for (int i = 0; i < copy.length - 3; i++) {
+    List<Card> sublist = copy.sublist(i, i + 3);
+    if (validRun(sublist)) {
+      result.add(new Run(sublist, player));
+    }
+  }
+
+  return result;
 }

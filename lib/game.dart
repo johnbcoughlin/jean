@@ -38,10 +38,10 @@ class Game {
       humanHand.addCard(deck.draw().value);
       computerHand.addCard(deck.draw().value);
     }
+    discard.discard(deck.draw().value);
     turnState = TurnState.Draw;
     // TODO(jack) remove test code
     activePlayer = Player.Computer;
-    new Future.delayed(const Duration(seconds: 1), () => print("moved"));
     handleMove(new PIMC(new IIGame.fromGame(this)).selectMove());
   }
 
@@ -55,7 +55,6 @@ class Game {
     }
     if (activePlayer == Player.Computer) {
       handleMove(new PIMC(new IIGame.fromGame(this)).selectMove());
-      new Future.delayed(const Duration(seconds: 1), () => print("moved"));
     }
   }
 

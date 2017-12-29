@@ -1,8 +1,10 @@
+import 'package:jean/card.dart';
 import 'package:jean/game.dart';
 import 'package:jean/mcts/immutable/immutable_game.dart';
 import 'package:jean/mcts/pimc.dart';
 import 'package:jean/player.dart';
 import 'dart:math';
+import 'package:jean/scored_group.dart';
 
 class Node {
   final String label;
@@ -48,14 +50,11 @@ class Node {
     for (Move move in allLegalMoves) {
       Node node = children[move.label()];
       num score = node.wins / node.visits;
-      if (score > bestScore) {
+      if (score >= bestScore) {
         bestScore = score;
         bestMove = move;
       }
     }
-
-    print("foo");
-    print(bestMove);
     return bestMove;
   }
 
@@ -98,7 +97,11 @@ List<Move> legalDrawMoves(PIGame game) {
 }
 
 List<Move> legalPlayMoves(PIGame game) {
-  return [new FinishPlay()];
+  List<Move> moves = [new FinishPlay()];
+  List<ScoredGroup> validGroups = allValidGroups(game.activeHand().cards,
+      game.activePlayer);
+  validGroups.forEach((group) => moves.add(new Play(group)));
+  return moves;
 }
 
 List<Move> legalDiscardMoves(PIGame game) {

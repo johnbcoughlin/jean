@@ -21,22 +21,27 @@ class MonteCarlo {
       List<Node> toGatherStats = [currentNode];
 
       // Selection
+//      print("Selecting...");
       while (currentNode.allChildrenVisited) {
         currentNode = currentNode.ucb1Maximizer();
         toGatherStats.add(currentNode);
       }
+
       // Expansion
+//      print("Expanding...");
       currentNode = currentNode.randomUnvisitedChild();
       toGatherStats.add(currentNode);
 
       PIGame game = currentNode.immutableGame;
       // Simulation
-      while (game.terminal) {
+//      print("Simulating...");
+      while (!game.terminal) {
         List<Move> moves = legalMoves(game);
         moves.shuffle();
         game = game.afterMove(moves[0]);
-        print("simulating");
-        new Future.delayed(new Duration(milliseconds: 200), () {});
+      }
+      if (game.terminal) {
+        print("WHOOOOOOO");
       }
 
       for (Node node in toGatherStats) {

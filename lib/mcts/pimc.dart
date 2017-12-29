@@ -31,12 +31,24 @@ class PIMC {
         bestScore = score;
       }
     });
+
+    print(bestMove.label());
     return bestMove;
   }
 }
 
 abstract class Move {
   String label();
+
+  @override
+  int hashcode() {
+    return label().hashCode;
+  }
+
+  @override
+  bool equals(Move other) {
+    return other.label() == label();
+  }
 }
 
 class Draw extends Move {

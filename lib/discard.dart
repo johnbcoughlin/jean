@@ -12,8 +12,8 @@ class DiscardPile {
   }
 
   List<Card> pickUpTill(int index) {
-    List<Card> result = cards.sublist(index, cards.length + 1);
-    cards.removeRange(index, cards.length + 1);
+    List<Card> result = cards.sublist(index, cards.length);
+    cards.removeRange(index, cards.length);
     return result;
   }
 

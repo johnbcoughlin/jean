@@ -30,6 +30,7 @@ class PIGame {
 
   PIGame afterMove(Move move) {
     if (move is Draw) {
+
       PIDeck deck = new PIDeck(new List.from(this.deck.cards));
       return new PIGame(deck, scoringMat,
           humanHand.withCards([deck.cards.removeLast()]),
@@ -37,7 +38,7 @@ class PIGame {
 
     } else if (move is Pickup) {
 
-      PIHand newHand = humanHand.withCards(
+      PIHand newHand = activeHand().withCards(
           this.discard.cards.sublist(move.fromIndex));
       ImmutableDiscard newDiscard = new ImmutableDiscard(
         this.discard.cards.sublist(0, move.fromIndex));
@@ -48,13 +49,38 @@ class PIGame {
           activePlayer, TurnState.Play);
 
     } else if (move is Play) {
-      print("played a thing!");
+
+      PIHand newHand = activeHand().withoutCards(move.group.cards
+          .map((sc) => sc.card)
+          .toList());
+      ImmutableScoredGroup group = new ImmutableScoredGroup(move.group.cards);
+      ImmutableScoringMat scoringMat = this.scoringMat.withGroup(group);
+      return activePlayer == Player.Computer
+        ? new PIGame(deck, scoringMat, humanHand, newHand, discard,
+          activePlayer, turnState)
+        : new PIGame(deck, scoringMat, newHand, computerHand, discard,
+          activePlayer, turnState);
+
+    } else if (move is FinishPlay) {
+      return new PIGame(deck, scoringMat, humanHand, computerHand, discard,
+          activePlayer, TurnState.Discard);
+
+    } else if (move is Discard) {
+
+      ImmutableDiscard discard = this.discard.withCard(move.card);
+      PIHand newHand = activeHand().withoutCards([move.card]);
+      return activePlayer == Player.Computer
+          ? new PIGame(deck, scoringMat, humanHand, newHand, discard,
+          Player.Human, TurnState.Draw)
+          : new PIGame(deck, scoringMat, newHand, computerHand, discard,
+          Player.Computer, TurnState.Draw);
+
     }
 
     return this;
   }
 
-  bool get terminal => humanHand.cards.isEmpty
+  bool get terminal => deck.cards.isEmpty || humanHand.cards.isEmpty
       || computerHand.cards.isEmpty;
 
   // TODO scoring
