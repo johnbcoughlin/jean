@@ -6,11 +6,15 @@ import 'package:jean/card.dart';
 import 'package:jean/discard.dart';
 import 'package:jean/discard_component.dart';
 import 'package:jean/mcts/immutable/ii_game.dart';
+import 'package:jean/mcts/immutable/immutable_game.dart';
+import 'package:jean/mcts/mc.dart';
 import 'package:jean/mcts/pimc.dart';
 import 'package:jean/player.dart';
 import 'package:jean/scoring_mat.dart';
 
 typedef void Undo();
+
+const int STARTING_HAND_SIZE = 6;
 
 class Game {
   Deck deck;
@@ -36,7 +40,7 @@ class Game {
   }
 
   void setup() {
-    for (num i = 0; i < 11; i++) {
+    for (num i = 0; i < STARTING_HAND_SIZE; i++) {
       humanHand.addCard(deck.draw().value);
       computerHand.addCard(deck.draw().value);
     }
@@ -44,7 +48,7 @@ class Game {
     turnState = TurnState.Draw;
     // TODO(jack) remove test code
     activePlayer = Player.Computer;
-    handleMove(new PIMC(new IIGame.fromGame(this)).selectMove());
+    handleMove(new MonteCarlo(new PIGame.fromGame(this)).bestMove());
   }
 
   void handleMove(Move move) {
@@ -57,7 +61,7 @@ class Game {
       handleDiscardMove(move);
     }
     if (activePlayer == Player.Computer) {
-      handleMove(new PIMC(new IIGame.fromGame(this)).selectMove());
+      handleMove(new MonteCarlo(new PIGame.fromGame(this)).bestMove());
     }
   }
 

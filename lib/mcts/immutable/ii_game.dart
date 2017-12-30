@@ -6,9 +6,10 @@ import 'package:jean/player.dart';
 class IIGame {
   List<Card> unknownCards;
   int deckSize;
-  int humanHandSize;
+  int opponentHandSize;
+  
   ImmutableScoringMat scoringMat;
-  PIHand computerHand;
+  PIHand myHand;
   ImmutableDiscard discard;
 
   Player player;
@@ -18,7 +19,7 @@ class IIGame {
       this.deckSize,
       this.humanHandSize,
       this.scoringMat,
-      this.computerHand,
+      this.myHand,
       this.discard,
       this.player,
       this.turnState);

@@ -79,7 +79,7 @@ class Node {
     this.children.forEach((label, child) {
       children = children + "\"${label}\": ${child.toJson()},\n";
     });
-    return "{\n\"wins\": ${wins},\n\"visits\": ${visits}, \"children\": {${children}}\n}";
+    return "{\n\"wins\": ${wins},\n\"visits\": ${visits}, ${children}\n}";
   }
 }
 
@@ -106,14 +106,17 @@ List<Move> legalDrawMoves(PIGame game) {
 
 List<Move> legalPlayMoves(PIGame game) {
   List<Move> moves = [new FinishPlay()];
-  List<ScoredGroup> validGroups = allValidGroups(game.activeHand().cards,
+  List<ScoredGroup> validGroups = allValidGroups(game.activeHand.cards,
       game.activePlayer);
+  if (game.activePlayer == Player.Human) {
+//    print("active hand cards: ${game.activeHand.cards}");
+  }
   validGroups.forEach((group) => moves.add(new Play(group)));
   return moves;
 }
 
 List<Move> legalDiscardMoves(PIGame game) {
   List<Move> moves = [];
-  game.computerHand.cards.forEach((c) => moves.add(new Discard(c)));
+  game.activeHand.cards.forEach((c) => moves.add(new Discard(c)));
   return moves;
 }

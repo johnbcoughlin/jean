@@ -7,7 +7,7 @@ class Card {
   Card(this.suit, this.ordinal);
 
   String toString() {
-    return "${ordinal} of ${suit}";
+    return toShortString();
   }
 
   String toShortString() {
@@ -31,6 +31,25 @@ class Card {
   static String cardBackUrl() {
     return "../static/cards/backs/b1fv.bmp";
   }
+
+  int index() {
+    return 13 * suit.index + ordinal.index;
+  }
+
+  static Iterable<Card> all() {
+    return new Iterable.generate(52, (int i) => new Card(
+      Suit.values[i ~/ 13], Ordinal.values[i % 13]
+    ));
+  }
+
+
+  @override
+  bool operator ==(Card other) {
+    return other.suit == suit && other.ordinal == ordinal;
+  }
+
+  @override
+  int get hashCode => index().hashCode;
 }
 
 enum Suit {

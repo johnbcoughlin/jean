@@ -17,7 +17,7 @@ class MonteCarlo {
     Node rootNode = new Node("root", this.game);
 
     int count = 0;
-    while (!rootNode.allChildrenVisited || count++ < 10) {
+    while (!rootNode.allChildrenVisited || count++ < 100) {
       Node currentNode = rootNode;
       List<Node> toGatherStats = [currentNode];
 
@@ -40,9 +40,6 @@ class MonteCarlo {
         List<Move> moves = legalMoves(game);
         moves.shuffle();
         game = game.afterMove(moves[0]);
-      }
-      if (game.terminal) {
-        print("WHOOOOOOO");
       }
 
       for (Node node in toGatherStats) {

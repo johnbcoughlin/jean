@@ -4,88 +4,140 @@ import 'package:jean/game.dart';
 import 'package:jean/mcts/pimc.dart';
 import 'package:jean/player.dart';
 import 'package:jean/scored_group.dart';
+import 'package:jean/util/hand_distribution.dart';
 
 class PIGame {
-  final PIDeck deck;
-  final ImmutableScoringMat scoringMat;
-  final PIHand humanHand;
-  final PIHand computerHand;
-  final ImmutableDiscard discard;
+  int deckSize;
+  List<Card> unknownCards;
+  ImmutableScoringMat scoringMat;
+  PIHand activeHand;
+  HandDistribution opponentHandDistribution;
+  int opponentHandSize;
+  ImmutableDiscard discard;
 
-  final Player activePlayer;
-  final TurnState turnState;
+  Player activePlayer;
+  TurnState turnState;
+
+  PIGame.fromGame(Game game) {
+    deckSize = game.deck.cards.length;
+    unknownCards = [];
+    unknownCards.addAll(game.deck.cards);
+    activePlayer = game.activePlayer;
+    if (activePlayer == Player.Human) {
+      activeHand = new PIHand(game.humanHand.cards);
+      unknownCards.addAll(game.computerHand.cards);
+    } else {
+      activeHand = new PIHand(game.computerHand.cards);
+      unknownCards.addAll(game.humanHand.cards);
+    }
+    opponentHandDistribution = new HandDistribution.uniform(unknownCards);
+    opponentHandSize = unknownCards.length - deckSize;
+    discard = new ImmutableDiscard(game.discard.cards);
+
+    scoringMat = new ImmutableScoringMat(
+      game.scoringMat.groups.map((sg) => new ImmutableScoredGroup(sg.cards)));
+
+    turnState = game.turnState;
+  }
 
   PIGame(
-      this.deck,
+      this.deckSize,
+      this.unknownCards,
       this.scoringMat,
-      this.humanHand,
-      this.computerHand,
+      this.activeHand,
+      this.opponentHandDistribution,
+      this.opponentHandSize,
       this.discard,
       this.activePlayer,
       this.turnState);
 
-  PIHand activeHand() {
-    return activePlayer == Player.Computer ? computerHand : humanHand;
+  PIGame withDrawToActiveHand(Card card) {
+    PIHand newActiveHand = activeHand.withCards([card]);
+    List<Card> newUnknownCards = new List.from(unknownCards);
+    newUnknownCards.remove(card);
+    HandDistribution newOpponentHandDistribution =
+        opponentHandDistribution.definitelyWithoutCard(card);
+    return new PIGame(deckSize - 1, newUnknownCards, scoringMat, newActiveHand,
+        newOpponentHandDistribution, opponentHandSize, discard, activePlayer,
+        TurnState.Play);
+  }
+
+  PIGame withPickupToActiveHand(int pickupIndex) {
+    PIHand newActiveHand = activeHand.withCards(
+        this.discard.cards.sublist(pickupIndex));
+    ImmutableDiscard newDiscard = new ImmutableDiscard(
+      this.discard.cards.sublist(0, pickupIndex));
+    return new PIGame(deckSize, unknownCards, scoringMat, newActiveHand,
+        opponentHandDistribution, opponentHandSize, newDiscard,
+        activePlayer, TurnState.Play);
+  }
+
+  PIGame withPlayedGroupFromActiveHand(ScoredGroup group) {
+    PIHand newActiveHand = activeHand.withoutCards(group.cards
+        .map((sc) => sc.card)
+        .toList());
+    ImmutableScoredGroup newGroup = new ImmutableScoredGroup(group.cards);
+    ImmutableScoringMat newScoringMat = this.scoringMat.withGroup(newGroup);
+    return new PIGame(deckSize, unknownCards, newScoringMat, newActiveHand,
+        opponentHandDistribution, opponentHandSize, discard,
+        activePlayer, TurnState.Play);
+  }
+
+  /**
+   * This one's different because we need to switch active players.
+   * We sample
+   */
+  PIGame withDiscardFromActiveHand(Card card) {
+    ImmutableDiscard newDiscard = discard.withCard(card);
+    /*
+     * The active hand in the next node is a reservoir sample of n of the
+     * unknown cards, according to their weights.
+     */
+    PIHand newActiveHand = new PIHand(opponentHandDistribution
+        .randomSample(opponentHandSize));
+    List<Card> newUnknownCards = new List.from(Card.all());
+    // remove all visible cards
+    newUnknownCards.removeWhere((card) => newActiveHand.cards.contains(card) ||
+        newDiscard.cards.contains(card) || scoringMat.groups.any((sg) =>
+        sg.cards.any((sc) => sc.card == card))
+    );
+    int newOpponentHandSize = activeHand.cards.length;
+    // TODO(jack) carry this over from previous turns
+    HandDistribution newOpponentHandDistribution = new HandDistribution
+        .uniform(newUnknownCards);
+    return new PIGame(deckSize, newUnknownCards, scoringMat, newActiveHand,
+        newOpponentHandDistribution, newOpponentHandSize,
+        newDiscard, opponent, TurnState.Draw);
   }
 
   PIGame afterMove(Move move) {
     if (move is Draw) {
-
-      PIDeck deck = new PIDeck(new List.from(this.deck.cards));
-      return new PIGame(deck, scoringMat,
-          humanHand.withCards([deck.cards.removeLast()]),
-          computerHand, discard, activePlayer, TurnState.Play);
-
+      this.unknownCards.shuffle();
+      return withDrawToActiveHand(this.unknownCards[0]);
     } else if (move is Pickup) {
-
-      PIHand newHand = activeHand().withCards(
-          this.discard.cards.sublist(move.fromIndex));
-      ImmutableDiscard newDiscard = new ImmutableDiscard(
-        this.discard.cards.sublist(0, move.fromIndex));
-      return activePlayer == Player.Computer
-          ? new PIGame(deck, scoringMat, humanHand, newHand, newDiscard,
-              activePlayer, turnState)
-          : new PIGame(deck, scoringMat, newHand, computerHand, newDiscard,
-          activePlayer, TurnState.Play);
-
+      return withPickupToActiveHand(move.fromIndex);
     } else if (move is Play) {
-
-      PIHand newHand = activeHand().withoutCards(move.group.cards
-          .map((sc) => sc.card)
-          .toList());
-      ImmutableScoredGroup group = new ImmutableScoredGroup(move.group.cards);
-      ImmutableScoringMat scoringMat = this.scoringMat.withGroup(group);
-      return activePlayer == Player.Computer
-        ? new PIGame(deck, scoringMat, humanHand, newHand, discard,
-          activePlayer, turnState)
-        : new PIGame(deck, scoringMat, newHand, computerHand, discard,
-          activePlayer, turnState);
-
+      return withPlayedGroupFromActiveHand(move.group);
     } else if (move is FinishPlay) {
-      return new PIGame(deck, scoringMat, humanHand, computerHand, discard,
+      return new PIGame(deckSize, unknownCards, scoringMat, activeHand,
+          opponentHandDistribution, opponentHandSize, discard,
           activePlayer, TurnState.Discard);
-
     } else if (move is Discard) {
-
-      ImmutableDiscard discard = this.discard.withCard(move.card);
-      PIHand newHand = activeHand().withoutCards([move.card]);
-      return activePlayer == Player.Computer
-          ? new PIGame(deck, scoringMat, humanHand, newHand, discard,
-          Player.Human, TurnState.Draw)
-          : new PIGame(deck, scoringMat, newHand, computerHand, discard,
-          Player.Computer, TurnState.Draw);
-
+      return withDiscardFromActiveHand(move.card);
+    } else {
+      throw new Exception("Unhandled move ${move}");
     }
-
-    return this;
   }
 
-  bool get terminal => deck.cards.isEmpty || humanHand.cards.isEmpty
-      || computerHand.cards.isEmpty;
+  bool get terminal => deckSize == 0 || opponentHandSize == 0
+      || activeHand.cards.isEmpty;
 
   // TODO scoring
   bool get computerWin => terminal &&
       scoringMat.computerPoints() > scoringMat.humanPoints();
+
+  Player get opponent => activePlayer == Player.Computer
+      ? Player.Human : Player.Computer;
 }
 
 class ImmutableDiscard {

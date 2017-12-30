@@ -33,7 +33,7 @@ class OfAKind extends ScoredGroup {
   OfAKind(List<Card> cards, Player player) :
         super.forPlayer(cards, player) {
     if (!validOfAKind(cards)) {
-      throw new ArgumentError("invalid 3 or 4 of a kind");
+      throw new ArgumentError("invalid 2 or 3 or 4 of a kind");
     }
     this.ordinal = cards[0].ordinal;
   }
@@ -43,8 +43,10 @@ class OfAKind extends ScoredGroup {
   }
 }
 
+int OF_A_KIND_MINIMUM = 2;
+
 bool validOfAKind(List<Card> cards) {
-  return cards.length >= 3 && cards
+  return cards.length >= OF_A_KIND_MINIMUM && cards
       .map((c) => c.ordinal)
       .toSet()
       .length == 1;
@@ -66,9 +68,11 @@ class Run extends ScoredGroup {
   }
 }
 
+int RUN_MIN_LENGTH = 2;
+
 bool validRun(List<Card> cards) {
   int k = cards.length;
-  if (k < 3) {
+  if (k < RUN_MIN_LENGTH) {
     return false;
   }
 //  if (cards.map((c) => c.suit).toSet().length != 1) {
@@ -135,12 +139,17 @@ List<ScoredGroup> allValidGroups(List<Card> cards, Player player) {
     }
   }
 
-  for (int i = 0; i < copy.length - 3; i++) {
-    List<Card> sublist = copy.sublist(i, i + 3);
+  for (int i = 0; i < copy.length - RUN_MIN_LENGTH; i++) {
+    List<Card> sublist = copy.sublist(i, i + RUN_MIN_LENGTH);
     if (validRun(sublist)) {
       result.add(new Run(sublist, player));
     }
   }
+
+  Map<Suit, List<Card>> bySuit = {
+    Suit.spades: [], Suit.hearts: [], Suit.diamonds: [], Suit.clubs: []
+  };
+  copy.forEach((c) => bySuit[c.suit].add(c));
 
   return result;
 }
