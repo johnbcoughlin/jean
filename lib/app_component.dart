@@ -46,7 +46,7 @@ import "player.dart";
       </div>
       <div>
         <ul>
-        <li *ngFor="#move of game.moves">
+        <li *ngFor="let move of game.moves">
           {{move.label()}}
         </li>
         </ul>

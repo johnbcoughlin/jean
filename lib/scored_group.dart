@@ -68,7 +68,7 @@ class Run extends ScoredGroup {
   }
 }
 
-int RUN_MIN_LENGTH = 2;
+const int RUN_MIN_LENGTH = 3;
 
 bool validRun(List<Card> cards) {
   int k = cards.length;
@@ -90,12 +90,12 @@ bool validRun(List<Card> cards) {
   if (ordinals[k - 1].index - ordinals[0].index == k - 1) {
     return true;
   }
-  // ace on the top
-  if (ordinals[0] == Ordinal.ace && ordinals[k - 1] == Ordinal.king) {
-    if (ordinals[k - 1].index - ordinals[1].index == k - 2) {
-      return true;
-    }
-  }
+//  // ace on the top
+//  if (ordinals[0] == Ordinal.ace && ordinals[k - 1] == Ordinal.king) {
+//    if (ordinals[k - 1].index - ordinals[1].index == k - 2) {
+//      return true;
+//    }
+//  }
   return false;
 }
 
@@ -109,11 +109,11 @@ class ScoredCard {
     switch (card.ordinal) {
       case Ordinal.ace:
         return 15;
-      case Ordinal.ten:
-      case Ordinal.jack:
-      case Ordinal.queen:
-      case Ordinal.king:
-        return 10;
+//      case Ordinal.ten:
+//      case Ordinal.jack:
+//      case Ordinal.queen:
+//      case Ordinal.king:
+//        return 10;
       default:
         return 5;
     }

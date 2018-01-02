@@ -41,14 +41,13 @@ abstract class Move {
   String label();
 
   @override
-  int hashcode() {
-    return label().hashCode;
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is Move &&
+              label() == other.label();
 
   @override
-  bool equals(Move other) {
-    return other.label() == label();
-  }
+  int get hashCode => label().hashCode;
 }
 
 class Draw extends Move {

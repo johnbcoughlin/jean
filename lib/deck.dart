@@ -1,17 +1,14 @@
+import 'dart:math';
 import 'package:jean/card.dart';
+import 'package:jean/mcts/immutable/immutable_game.dart';
 import 'util/optional.dart';
 
 class Deck {
   List<Card> cards;
 
   Deck() {
-    this.cards = new List();
-    for (Suit suit in Suit.values) {
-      for (Ordinal ordinal in Ordinal.values) {
-        this.cards.add(new Card(suit, ordinal));
-      }
-    }
-    this.cards.shuffle();
+    this.cards = new List.from(Card.all());
+    this.cards.shuffle(PIGame.RANDOM);
   }
 
   Optional<Card> draw() {

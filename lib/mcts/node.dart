@@ -9,46 +9,54 @@ import 'package:jean/scored_group.dart';
 class Node {
   final String label;
 
-  final PIGame immutableGame;
-
   num wins;
   num visits;
 
   List<Move> allLegalMoves;
   List<Move> unvisitedMoves;
+  Player activePlayer;
 
   /* indexed by the labels of the moves */
-  Map<String, Node> children;
+  Map<Move, Node> children;
 
-  Node(this.label, this.immutableGame) {
+  Node(this.label, this.activePlayer) {
     this.wins = 0;
-    this.visits = 1;
+    this.visits = 0;
     this.children = new Map();
-    allLegalMoves = legalMoves(this.immutableGame);
-    unvisitedMoves = new List.from(allLegalMoves);
   }
 
-  Node ucb1Maximizer() {
+  Move ucb1Maximizer() {
     double bestUpperBound = 0.0;
-    Node best = null;
-    children.forEach((label, child) {
-      int wins = immutableGame.activePlayer == Player.Computer
+    Move best = null;
+    children.forEach((move, child) {
+      if (child.visits == 0) {
+        throw new Exception("0 visits");
+      }
+      int wins = activePlayer == Player.Computer
           ? child.wins : child.visits - child.wins;
       double ucb1 = (wins / child.visits) +
           sqrt(2 * log(visits) / child.visits);
-      if (ucb1 > bestUpperBound) {
-        best = child;
+      if (ucb1 >= bestUpperBound) {
+        best = move;
         bestUpperBound = ucb1;
       }
     });
     return best;
   }
 
+  Node nodeFromMove(Move move) {
+    if (!children.containsKey(move)) {
+      children[move] = new Node(move.label(),
+          move is Discard ? otherPlayer : activePlayer);
+    }
+    return children[move];
+  }
+
   Move bestMove() {
     num bestScore = 0.0;
     Move bestMove = null;
-    for (Move move in allLegalMoves) {
-      Node node = children[move.label()];
+    for (Move move in children.keys) {
+      Node node = children[move];
       num score = node.wins / node.visits;
       if (score >= bestScore) {
         bestScore = score;
@@ -58,28 +66,32 @@ class Node {
     return bestMove;
   }
 
-  Node randomUnvisitedChild() {
-    unvisitedMoves.shuffle();
-    Move move = unvisitedMoves.removeLast();
-    children[move.label()] =
-    new Node(move.label(), immutableGame.afterMove(move));
-    return children[move.label()];
+  List<Move> unvisitedLegalMoves(PIGame game) {
+    List<Move> result = legalMoves(game);
+    result.removeWhere((move) => children.containsKey(move));
+    return result;
   }
-
-  bool get allChildrenVisited => children.length == allLegalMoves.length;
 
   void recordVisit(bool win) {
     visits += 1;
-    wins += (win == (immutableGame.activePlayer == Player.Computer))
+    wins += (win == (activePlayer == Player.Computer))
         ? 1 : 0;
   }
+
+  Player get otherPlayer => activePlayer == Player.Computer
+      ? Player.Human : Player.Computer;
 
   String toJson() {
     String children = "\n";
     this.children.forEach((label, child) {
       children = children + "\"${label}\": ${child.toJson()},\n";
     });
-    return "{\n\"wins\": ${wins},\n\"visits\": ${visits}, ${children}\n}";
+    return "{\n\"player\": \"${activePlayer}\", \"wins\": ${wins},\n\"visits\": ${visits}, ${children}\n}";
+  }
+
+  @override
+  String toString() {
+    return "${wins}/${visits}";
   }
 }
 

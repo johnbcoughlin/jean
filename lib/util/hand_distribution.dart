@@ -16,25 +16,34 @@ class HandDistribution {
     this.normalizer = cards.length.toDouble();
   }
 
-  List<Card> randomSample(int n) {
+  List<Card> randomSample(List<Card> population, int n) {
     Random random = new Random();
+    List<Card> pool = new List.from(population);
     Map<Card, double> keys = new Map();
-    Card.all().forEach((card) {
+    population.forEach((card) {
       double weight = weights[card.index()];
       double key = pow(random.nextDouble(), 1.0 / weight);
       keys[card] = key;
     });
-    PriorityQueue<Card> queue = new HeapPriorityQueue(
-            (c1, c2) {
-              return keys[c1] > keys[c2] ? 1 : -1;
-            });
-    queue.addAll(Card.all());
-    return queue.toList().sublist(0, n);
+    pool.sort((c1, c2) {
+      if (c1 == c2) {
+        return 0;
+      }
+      return keys[c1] < keys[c2] ? -1 : 1;
+    });
+    return pool.sublist(0, n);
   }
 
   HandDistribution definitelyWithoutCard(Card card) {
     List<double> newWeights = new List.from(weights);
     newWeights[card.index()] = 0.0;
     return new HandDistribution(newWeights, normalizer - weights[card.index()]);
+  }
+
+  @override
+  String toString() {
+    Map<Card, double> weights = new Map();
+    Card.all().forEach((card) => weights[card] = this.weights[card.index()]);
+    return weights.toString();
   }
 }

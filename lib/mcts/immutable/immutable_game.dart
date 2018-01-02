@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:jean/card.dart';
 import 'package:jean/deck.dart';
 import 'package:jean/game.dart';
@@ -7,6 +8,8 @@ import 'package:jean/scored_group.dart';
 import 'package:jean/util/hand_distribution.dart';
 
 class PIGame {
+  static Random RANDOM = new Random();
+
   int deckSize;
   List<Card> unknownCards;
   ImmutableScoringMat scoringMat;
@@ -49,7 +52,11 @@ class PIGame {
       this.opponentHandSize,
       this.discard,
       this.activePlayer,
-      this.turnState);
+      this.turnState) {
+    if (this.unknownCards.length != this.deckSize + this.opponentHandSize) {
+      throw new Exception("unknown cards mismatch");
+    }
+  }
 
   PIGame withDrawToActiveHand(Card card) {
     PIHand newActiveHand = activeHand.withCards([card]);
@@ -85,7 +92,6 @@ class PIGame {
 
   /**
    * This one's different because we need to switch active players.
-   * We sample
    */
   PIGame withDiscardFromActiveHand(Card card) {
     ImmutableDiscard newDiscard = discard.withCard(card);
@@ -94,17 +100,20 @@ class PIGame {
      * unknown cards, according to their weights.
      */
     PIHand newActiveHand = new PIHand(opponentHandDistribution
-        .randomSample(opponentHandSize));
+        .randomSample(unknownCards, opponentHandSize));
     List<Card> newUnknownCards = new List.from(Card.all());
     // remove all visible cards
     newUnknownCards.removeWhere((card) => newActiveHand.cards.contains(card) ||
         newDiscard.cards.contains(card) || scoringMat.groups.any((sg) =>
         sg.cards.any((sc) => sc.card == card))
     );
-    int newOpponentHandSize = activeHand.cards.length;
+
+    // subtract one because we just discarded
+    int newOpponentHandSize = activeHand.cards.length - 1;
     // TODO(jack) carry this over from previous turns
     HandDistribution newOpponentHandDistribution = new HandDistribution
         .uniform(newUnknownCards);
+
     return new PIGame(deckSize, newUnknownCards, scoringMat, newActiveHand,
         newOpponentHandDistribution, newOpponentHandSize,
         newDiscard, opponent, TurnState.Draw);
@@ -112,7 +121,7 @@ class PIGame {
 
   PIGame afterMove(Move move) {
     if (move is Draw) {
-      this.unknownCards.shuffle();
+      this.unknownCards.shuffle(RANDOM);
       return withDrawToActiveHand(this.unknownCards[0]);
     } else if (move is Pickup) {
       return withPickupToActiveHand(move.fromIndex);

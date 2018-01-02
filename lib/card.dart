@@ -33,13 +33,17 @@ class Card {
   }
 
   int index() {
-    return 13 * suit.index + ordinal.index;
+    return Ordinal.values.length * suit.index + ordinal.index;
   }
 
   static Iterable<Card> all() {
-    return new Iterable.generate(52, (int i) => new Card(
-      Suit.values[i ~/ 13], Ordinal.values[i % 13]
-    ));
+    return new Iterable.generate(
+        Suit.values.length * Ordinal.values.length,
+            (int i) =>
+        new Card(
+            Suit.values[i ~/ Ordinal.values.length],
+            Ordinal.values[i % Ordinal.values.length]
+        ));
   }
 
 
@@ -78,10 +82,6 @@ enum Ordinal {
   jack,
   queen,
   king
-}
-
-int compare(Ordinal a, Ordinal b) {
-
 }
 
 String ordinalToString(Ordinal ordinal) {

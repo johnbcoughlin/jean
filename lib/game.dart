@@ -14,7 +14,7 @@ import 'package:jean/scoring_mat.dart';
 
 typedef void Undo();
 
-const int STARTING_HAND_SIZE = 6;
+const int STARTING_HAND_SIZE = 4;
 
 class Game {
   Deck deck;
@@ -30,6 +30,8 @@ class Game {
   Undo undo;
 
   List<Move> moves = [];
+
+  MonteCarlo monteCarlo;
 
   Game() {
     deck = new Deck();
@@ -48,11 +50,13 @@ class Game {
     turnState = TurnState.Draw;
     // TODO(jack) remove test code
     activePlayer = Player.Computer;
-    handleMove(new MonteCarlo(new PIGame.fromGame(this)).bestMove());
+    monteCarlo = new MonteCarlo(new PIGame.fromGame(this));
+    handleMove(monteCarlo.bestMove());
   }
 
   void handleMove(Move move) {
     moves.add(move);
+    monteCarlo.notify(move);
     if (turnState == TurnState.Draw) {
       handleDrawMove(move);
     } else if (turnState == TurnState.Play) {
@@ -60,8 +64,10 @@ class Game {
     } else if (turnState == TurnState.Discard) {
       handleDiscardMove(move);
     }
+    print("TurnState: ${turnState}, Player: ${activePlayer}");
     if (activePlayer == Player.Computer) {
-      handleMove(new MonteCarlo(new PIGame.fromGame(this)).bestMove());
+      print("AI");
+      handleMove(monteCarlo.bestMove());
     }
   }
 
