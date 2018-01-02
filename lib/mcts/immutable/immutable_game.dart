@@ -56,6 +56,17 @@ class PIGame {
     if (this.unknownCards.length != this.deckSize + this.opponentHandSize) {
       throw new Exception("unknown cards mismatch");
     }
+//    print("unknown cards: ${unknownCards.length}. " +
+//        "activehand: ${activeHand.cards.length}. discard: ${discard.cards.length} " +
+//        "scored: ${scoringMat.playedCards()}");
+    if (this.unknownCards.length !=
+        52 - this.scoringMat.playedCards() - this.activeHand.cards.length
+    - this.discard.cards.length) {
+      throw new Exception("known cards mismatch");
+    }
+    if (this.unknownCards.any((c) => this.activeHand.cards.contains(c))) {
+      throw new Exception("unknown card in active hand");
+    }
   }
 
   PIGame withDrawToActiveHand(Card card) {
@@ -94,6 +105,10 @@ class PIGame {
    * This one's different because we need to switch active players.
    */
   PIGame withDiscardFromActiveHand(Card card) {
+    if (!activeHand.cards.contains(card)) {
+      throw new Exception("cannot discard card that you do not hold");
+    }
+
     ImmutableDiscard newDiscard = discard.withCard(card);
     /*
      * The active hand in the next node is a reservoir sample of n of the
@@ -101,6 +116,9 @@ class PIGame {
      */
     PIHand newActiveHand = new PIHand(opponentHandDistribution
         .randomSample(unknownCards, opponentHandSize));
+    if (newActiveHand.cards.length != opponentHandSize) {
+      throw new Exception("ugh");
+    }
     List<Card> newUnknownCards = new List.from(Card.all());
     // remove all visible cards
     newUnknownCards.removeWhere((card) => newActiveHand.cards.contains(card) ||
@@ -228,11 +246,20 @@ class ImmutableScoringMat {
     }
     return score;
   }
+
+  int playedCards() {
+    return groups.fold(0, (sum, group) => sum + group.cards.length);
+  }
 }
 
 class ImmutableScoredGroup {
   final List<ScoredCard> cards;
 
   ImmutableScoredGroup(this.cards);
+
+  @override
+  String toString() {
+    return cards.toString();
+  }
 }
 

@@ -25,10 +25,11 @@ class Node {
     this.children = new Map();
   }
 
-  Move ucb1Maximizer() {
+  Move ucb1Maximizer(List<Move> legalMoves) {
     double bestUpperBound = 0.0;
     Move best = null;
-    children.forEach((move, child) {
+    legalMoves.forEach((move) {
+      Node child = nodeFromMove(move);
       if (child.visits == 0) {
         throw new Exception("0 visits");
       }

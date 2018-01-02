@@ -118,6 +118,11 @@ class ScoredCard {
         return 5;
     }
   }
+
+  @override
+  String toString() {
+    return card.toString();
+  }
 }
 
 enum GroupType {

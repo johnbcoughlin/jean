@@ -2,17 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6978a9ca-cf72-462a-b592-ee86d011baf3" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/app_component.dart" afterPath="$PROJECT_DIR$/lib/app_component.dart" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/card.dart" afterPath="$PROJECT_DIR$/lib/card.dart" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/deck.dart" afterPath="$PROJECT_DIR$/lib/deck.dart" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/game.dart" afterPath="$PROJECT_DIR$/lib/game.dart" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/mcts/immutable/immutable_game.dart" afterPath="$PROJECT_DIR$/lib/mcts/immutable/immutable_game.dart" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/mcts/mc.dart" afterPath="$PROJECT_DIR$/lib/mcts/mc.dart" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/mcts/node.dart" afterPath="$PROJECT_DIR$/lib/mcts/node.dart" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/mcts/pimc.dart" afterPath="$PROJECT_DIR$/lib/mcts/pimc.dart" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/scored_group.dart" afterPath="$PROJECT_DIR$/lib/scored_group.dart" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/util/hand_distribution.dart" afterPath="$PROJECT_DIR$/lib/util/hand_distribution.dart" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -31,14 +24,14 @@
     <favorites_list name="jean" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.42237642">
+    <splitter split-orientation="horizontal" split-proportion="0.49436253">
       <split-first>
         <leaf>
           <file leaf-file-name="mc.dart" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/lib/mcts/mc.dart">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="263">
-                  <caret line="59" column="8" lean-forward="false" selection-start-line="59" selection-start-column="8" selection-end-line="59" selection-end-column="8" />
+                <state relative-caret-position="242">
+                  <caret line="19" column="60" lean-forward="false" selection-start-line="19" selection-start-column="60" selection-end-line="19" selection-end-column="60" />
                   <folding>
                     <element signature="e#0#20#0" expanded="true" />
                   </folding>
@@ -50,14 +43,12 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="hand_distribution.dart" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/lib/util/hand_distribution.dart">
+          <file leaf-file-name="game.dart" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/lib/game.dart">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="112">
-                  <caret line="11" column="35" lean-forward="true" selection-start-line="11" selection-start-column="35" selection-end-line="11" selection-end-column="35" />
-                  <folding>
-                    <element signature="e#0#19#0" expanded="true" />
-                  </folding>
+                <state relative-caret-position="197">
+                  <caret line="73" column="7" lean-forward="true" selection-start-line="73" selection-start-column="7" selection-end-line="73" selection-end-column="7" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -106,15 +97,15 @@
         <option value="$PROJECT_DIR$/lib/util/beta.dart" />
         <option value="$PROJECT_DIR$/lib/app_component.dart" />
         <option value="$PROJECT_DIR$/lib/deck.dart" />
-        <option value="$PROJECT_DIR$/lib/scored_group.dart" />
         <option value="$PROJECT_DIR$/lib/player.dart" />
-        <option value="$PROJECT_DIR$/lib/mcts/node.dart" />
         <option value="$PROJECT_DIR$/lib/mcts/pimc.dart" />
-        <option value="$PROJECT_DIR$/lib/mcts/mc.dart" />
         <option value="$PROJECT_DIR$/lib/game.dart" />
         <option value="$PROJECT_DIR$/lib/util/hand_distribution.dart" />
-        <option value="$PROJECT_DIR$/lib/mcts/immutable/immutable_game.dart" />
         <option value="$PROJECT_DIR$/lib/card.dart" />
+        <option value="$PROJECT_DIR$/lib/scored_group.dart" />
+        <option value="$PROJECT_DIR$/lib/mcts/node.dart" />
+        <option value="$PROJECT_DIR$/lib/mcts/immutable/immutable_game.dart" />
+        <option value="$PROJECT_DIR$/lib/mcts/mc.dart" />
       </list>
     </option>
   </component>
@@ -285,17 +276,18 @@
       <workItem from="1514148138482" duration="19947000" />
       <workItem from="1514510741252" duration="3529000" />
       <workItem from="1514520595548" duration="11377000" />
-      <workItem from="1514755369382" duration="9490000" />
+      <workItem from="1514755369382" duration="13128000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44703000" />
+    <option name="totallyTimeSpent" value="48341000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="873" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19930555" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19930555" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Pub Serve" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3078731" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -330,7 +322,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/optional-1.2.3+1/lib/src/present.dart" />
     <entry file="file:///usr/local/Cellar/dart/1.24.2/libexec/lib/core/errors.dart" />
     <entry file="file://$PROJECT_DIR$/web/static/cards/backs/b1pb.bmp">
       <provider selected="true" editor-type-id="images">
@@ -472,19 +463,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/discard.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="19" column="32" lean-forward="false" selection-start-line="19" selection-start-column="32" selection-end-line="19" selection-end-column="32" />
-          <folding>
-            <marker date="1514514308000" expanded="true" signature="91:125" ph="{...}" />
-            <marker date="1514514308000" expanded="true" signature="153:184" ph="{...}" />
-            <marker date="1514514308000" expanded="true" signature="221:349" ph="{...}" />
-            <marker date="1514514308000" expanded="true" signature="383:418" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/scoring_mat.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -566,37 +544,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/scored_group.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="89" column="39" lean-forward="true" selection-start-line="89" selection-start-column="39" selection-end-line="89" selection-end-column="39" />
-          <folding>
-            <marker date="1514759168000" expanded="false" signature="7:83" ph="..." />
-            <marker date="1514759168000" expanded="true" signature="112:438" ph="{...}" />
-            <marker date="1514759168000" expanded="true" signature="381:436" ph="{...}" />
-            <marker date="1514759168000" expanded="true" signature="509:713" ph="{...}" />
-            <marker date="1514759168000" expanded="true" signature="749:1079" ph="{...}" />
-            <marker date="1514759168000" expanded="true" signature="855:999" ph="{...}" />
-            <marker date="1514759168000" expanded="true" signature="1036:1077" ph="{...}" />
-            <marker date="1514759168000" expanded="true" signature="1145:1264" ph="{...}" />
-            <marker date="1514759168000" expanded="true" signature="1296:1638" ph="{...}" />
-            <marker date="1514759168000" expanded="true" signature="1378:1463" ph="{...}" />
-            <marker date="1514759168000" expanded="true" signature="1512:1636" ph="{...}" />
-            <marker date="1514759168000" expanded="true" signature="1559:1565" ph="&lt;~&gt;" />
-            <marker date="1514759168000" expanded="true" signature="1703:2386" ph="{...}" />
-            <marker date="1514759168000" expanded="true" signature="1779:1860" ph="//..." />
-            <marker date="1514759168000" expanded="true" signature="2175:2368" ph="//..." />
-            <marker date="1514759168000" expanded="true" signature="2405:2750" ph="{...}" />
-            <marker date="1514759168000" expanded="true" signature="2504:2748" ph="{...}" />
-            <marker date="1514759168000" expanded="true" signature="2577:2705" ph="//..." />
-            <marker date="1514759168000" expanded="true" signature="2767:2784" ph="{...}" />
-            <marker date="1514759168000" expanded="true" signature="2852:3568" ph="{...}" />
-            <marker date="1514759168000" expanded="true" signature="2890:2955" ph="//..." />
-            <marker date="1514759168000" expanded="true" signature="3424:3501" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/mcts/immutable/ii_game.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="233">
@@ -633,30 +580,6 @@
           <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
           <folding>
             <marker date="1514148109000" expanded="true" signature="12:35" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/mcts/node.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="433">
-          <caret line="97" column="5" lean-forward="false" selection-start-line="97" selection-start-column="5" selection-end-line="97" selection-end-column="5" />
-          <folding>
-            <marker date="1514762511000" expanded="true" signature="7:257" ph="..." />
-            <marker date="1514762511000" expanded="true" signature="270:2382" ph="{...}" />
-            <marker date="1514762511000" expanded="true" signature="405:445" ph="/*...*/" />
-            <marker date="1514762511000" expanded="true" signature="513:589" ph="{...}" />
-            <marker date="1514762511000" expanded="true" signature="614:1105" ph="{...}" />
-            <marker date="1514762511000" expanded="true" signature="1138:1318" ph="{...}" />
-            <marker date="1514762511000" expanded="true" signature="1338:1629" ph="{...}" />
-            <marker date="1514762511000" expanded="true" signature="1677:1805" ph="{...}" />
-            <marker date="1514762511000" expanded="true" signature="1836:1930" ph="{...}" />
-            <marker date="1514762511000" expanded="true" signature="2051:2309" ph="{...}" />
-            <marker date="1514762511000" expanded="true" signature="2343:2380" ph="{...}" />
-            <marker date="1514762511000" expanded="true" signature="2419:2722" ph="{...}" />
-            <marker date="1514762511000" expanded="true" signature="2763:2907" ph="{...}" />
-            <marker date="1514762511000" expanded="true" signature="2948:3275" ph="{...}" />
-            <marker date="1514762511000" expanded="true" signature="3319:3430" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -802,42 +725,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/game.dart">
+    <entry file="file:///usr/local/Cellar/dart/1.24.3/libexec/lib/core/object.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="98">
-          <caret line="19" column="4" lean-forward="false" selection-start-line="19" selection-start-column="4" selection-end-line="19" selection-end-column="4" />
+        <state relative-caret-position="402">
+          <caret line="58" column="25" lean-forward="false" selection-start-line="58" selection-start-column="25" selection-end-line="58" selection-end-column="25" />
           <folding>
-            <marker date="1514764632000" expanded="false" signature="7:463" ph="..." />
-            <marker date="1514764632000" expanded="true" signature="533:3672" ph="{...}" />
-            <marker date="1514764632000" expanded="true" signature="808:963" ph="{...}" />
-            <marker date="1514764632000" expanded="true" signature="980:1375" ph="{...}" />
-            <marker date="1514764632000" expanded="true" signature="1406:1860" ph="{...}" />
-            <marker date="1514764632000" expanded="true" signature="1895:2194" ph="{...}" />
-            <marker date="1514764632000" expanded="true" signature="2229:2571" ph="{...}" />
-            <marker date="1514764632000" expanded="true" signature="2609:2868" ph="{...}" />
-            <marker date="1514764632000" expanded="true" signature="2884:3077" ph="{...}" />
-            <marker date="1514764632000" expanded="true" signature="3118:3361" ph="{...}" />
-            <marker date="1514764632000" expanded="true" signature="3472:3570" ph="{...}" />
-            <marker date="1514764632000" expanded="true" signature="3592:3670" ph="{...}" />
-            <marker date="1514764632000" expanded="true" signature="3689:3718" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/mcts/mc.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="59" column="8" lean-forward="false" selection-start-line="59" selection-start-column="8" selection-end-line="59" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
+            <marker date="1513203884000" expanded="false" signature="0:215" ph="/.../" />
+            <marker date="1513203884000" expanded="true" signature="237:812" ph="/**...*/" />
+            <marker date="1513203884000" expanded="true" signature="826:4114" ph="{...}" />
+            <marker date="1513203884000" expanded="true" signature="830:1032" ph="/**...*/" />
+            <marker date="1513203884000" expanded="true" signature="1054:2147" ph="/**...*/" />
+            <marker date="1513203884000" expanded="true" signature="2187:3526" ph="/**...*/" />
+            <marker date="1513203884000" expanded="true" signature="3559:3621" ph="/**...*/" />
+            <marker date="1513203884000" expanded="true" signature="3655:3953" ph="/**...*/" />
+            <marker date="1513203884000" expanded="true" signature="4013:4079" ph="/**...*/" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/card.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="38" column="24" lean-forward="false" selection-start-line="38" selection-start-column="24" selection-end-line="38" selection-end-column="24" />
+        <state relative-caret-position="14">
+          <caret line="2" column="6" lean-forward="false" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
           <folding>
             <marker date="1514765711000" expanded="true" signature="47:1255" ph="{...}" />
             <marker date="1514765711000" expanded="true" signature="148:181" ph="{...}" />
@@ -857,44 +766,140 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/mcts/immutable/immutable_game.dart">
+    <entry file="file://$PROJECT_DIR$/lib/scored_group.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="16" column="2" lean-forward="false" selection-start-line="16" selection-start-column="2" selection-end-line="16" selection-end-column="2" />
+        <state relative-caret-position="257">
+          <caret line="101" column="6" lean-forward="false" selection-start-line="101" selection-start-column="6" selection-end-line="101" selection-end-column="6" />
           <folding>
-            <marker date="1514765672000" expanded="false" signature="7:283" ph="..." />
-            <marker date="1514765672000" expanded="true" signature="298:5407" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="612:1369" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="1606:1747" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="1790:2244" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="2295:2682" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="2742:3188" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="3192:3269" ph="/**...*/" />
-            <marker date="1514765672000" expanded="true" signature="3316:4385" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="3380:3514" ph="/*...*/" />
-            <marker date="1514765672000" expanded="true" signature="4417:5090" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="5432:5660" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="5533:5658" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="5675:6064" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="5764:5883" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="5925:6062" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="6079:6352" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="6163:6350" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="6380:7189" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="6523:6667" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="6689:6926" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="6947:7187" ph="{...}" />
-            <marker date="1514765672000" expanded="true" signature="7218:7290" ph="{...}" />
+            <marker date="1514868778000" expanded="false" signature="7:83" ph="..." />
+            <marker date="1514868778000" expanded="true" signature="112:438" ph="{...}" />
+            <marker date="1514868778000" expanded="true" signature="381:436" ph="{...}" />
+            <marker date="1514868778000" expanded="true" signature="509:713" ph="{...}" />
+            <marker date="1514868778000" expanded="true" signature="749:1079" ph="{...}" />
+            <marker date="1514868778000" expanded="true" signature="855:999" ph="{...}" />
+            <marker date="1514868778000" expanded="true" signature="1036:1077" ph="{...}" />
+            <marker date="1514868778000" expanded="true" signature="1145:1264" ph="{...}" />
+            <marker date="1514868778000" expanded="true" signature="1296:1638" ph="{...}" />
+            <marker date="1514868778000" expanded="true" signature="1378:1463" ph="{...}" />
+            <marker date="1514868778000" expanded="true" signature="1512:1636" ph="{...}" />
+            <marker date="1514868778000" expanded="true" signature="1559:1565" ph="&lt;~&gt;" />
+            <marker date="1514868778000" expanded="true" signature="1703:2386" ph="{...}" />
+            <marker date="1514868778000" expanded="true" signature="1779:1860" ph="//..." />
+            <marker date="1514868778000" expanded="true" signature="2175:2368" ph="//..." />
+            <marker date="1514868778000" expanded="true" signature="2405:2817" ph="{...}" />
+            <marker date="1514868778000" expanded="true" signature="2504:2748" ph="{...}" />
+            <marker date="1514868778000" expanded="true" signature="2577:2705" ph="//..." />
+            <marker date="1514868778000" expanded="true" signature="2782:2815" ph="{...}" />
+            <marker date="1514868778000" expanded="true" signature="2834:2851" ph="{...}" />
+            <marker date="1514868778000" expanded="true" signature="2919:3635" ph="{...}" />
+            <marker date="1514868778000" expanded="true" signature="2957:3022" ph="//..." />
+            <marker date="1514868778000" expanded="true" signature="3491:3568" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/util/hand_distribution.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="11" column="35" lean-forward="true" selection-start-line="11" selection-start-column="35" selection-end-line="11" selection-end-column="35" />
+        <state relative-caret-position="14">
+          <caret line="4" column="6" lean-forward="false" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <marker date="1514765332000" expanded="true" signature="7:97" ph="..." />
+            <marker date="1514765332000" expanded="true" signature="122:1363" ph="{...}" />
+            <marker date="1514765332000" expanded="true" signature="267:431" ph="{...}" />
+            <marker date="1514765332000" expanded="true" signature="489:940" ph="{...}" />
+            <marker date="1514765332000" expanded="true" signature="994:1170" ph="{...}" />
+            <marker date="1514765332000" expanded="true" signature="1204:1361" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/discard.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+          <folding>
+            <marker date="1514514308000" expanded="true" signature="52:420" ph="{...}" />
+            <marker date="1514514308000" expanded="true" signature="91:125" ph="{...}" />
+            <marker date="1514514308000" expanded="true" signature="153:184" ph="{...}" />
+            <marker date="1514514308000" expanded="true" signature="221:349" ph="{...}" />
+            <marker date="1514514308000" expanded="true" signature="383:418" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/mcts/node.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="69" column="13" lean-forward="false" selection-start-line="69" selection-start-column="13" selection-end-line="69" selection-end-column="13" />
+          <folding>
+            <marker date="1514871199000" expanded="true" signature="7:257" ph="..." />
+            <marker date="1514871199000" expanded="true" signature="270:2437" ph="{...}" />
+            <marker date="1514871199000" expanded="true" signature="405:445" ph="/*...*/" />
+            <marker date="1514871199000" expanded="true" signature="513:589" ph="{...}" />
+            <marker date="1514871199000" expanded="true" signature="635:1160" ph="{...}" />
+            <marker date="1514871199000" expanded="true" signature="1193:1373" ph="{...}" />
+            <marker date="1514871199000" expanded="true" signature="1393:1684" ph="{...}" />
+            <marker date="1514871199000" expanded="true" signature="1732:1860" ph="{...}" />
+            <marker date="1514871199000" expanded="true" signature="1891:1985" ph="{...}" />
+            <marker date="1514871199000" expanded="true" signature="2106:2364" ph="{...}" />
+            <marker date="1514871199000" expanded="true" signature="2398:2435" ph="{...}" />
+            <marker date="1514871199000" expanded="true" signature="2474:2777" ph="{...}" />
+            <marker date="1514871199000" expanded="true" signature="2818:2962" ph="{...}" />
+            <marker date="1514871199000" expanded="true" signature="3003:3330" ph="{...}" />
+            <marker date="1514871199000" expanded="true" signature="3374:3485" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/mcts/immutable/immutable_game.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="127">
+          <caret line="139" column="9" lean-forward="false" selection-start-line="139" selection-start-column="9" selection-end-line="139" selection-end-column="9" />
+          <folding>
+            <marker date="1514871802000" expanded="false" signature="7:283" ph="..." />
+            <marker date="1514871802000" expanded="true" signature="298:6162" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="612:1369" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="1606:2282" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="1744:1937" ph="//..." />
+            <marker date="1514871802000" expanded="true" signature="2325:2779" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="2830:3217" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="3277:3723" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="3727:3804" ph="/**...*/" />
+            <marker date="1514871802000" expanded="true" signature="3851:5140" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="4037:4171" ph="/*...*/" />
+            <marker date="1514871802000" expanded="true" signature="5172:5845" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="6187:6415" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="6288:6413" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="6430:6819" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="6519:6638" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="6680:6817" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="6834:7107" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="6918:7105" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="7135:8040" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="7278:7422" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="7444:7681" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="7702:7942" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="7964:8038" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="8069:8209" ph="{...}" />
+            <marker date="1514871802000" expanded="true" signature="8173:8207" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/game.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="73" column="7" lean-forward="true" selection-start-line="73" selection-start-column="7" selection-end-line="73" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/mcts/mc.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="19" column="60" lean-forward="false" selection-start-line="19" selection-start-column="60" selection-end-line="19" selection-end-column="60" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
           </folding>
         </state>
       </provider>

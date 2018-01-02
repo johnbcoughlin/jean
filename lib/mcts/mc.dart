@@ -17,6 +17,7 @@ class MonteCarlo {
   }
 
   void notify(Move move) {
+    // TODO(jack) the bug is here. this is non-deterministic.
     this.game = game.afterMove(move);
     this.rootNode = rootNode.nodeFromMove(move);
   }
@@ -29,13 +30,14 @@ class MonteCarlo {
 
       PIGame currentGame = this.game;
       Node currentNode = rootNode;
-      List<Move> unvisitedLegalMoves = currentNode.unvisitedLegalMoves(currentGame);
+      List<Move> unvisitedLegalMoves =
+      currentNode.unvisitedLegalMoves(currentGame);
       List<Node> toGatherStats = [currentNode];
 
       // Selection
 //      print("Selecting...");
       while (!currentGame.terminal && unvisitedLegalMoves.isEmpty) {
-        Move nextMove = currentNode.ucb1Maximizer();
+        Move nextMove = currentNode.ucb1Maximizer(legalMoves(currentGame));
         currentGame = currentGame.afterMove(nextMove);
         currentNode = currentNode.nodeFromMove(nextMove);
         unvisitedLegalMoves = currentNode.unvisitedLegalMoves(currentGame);
