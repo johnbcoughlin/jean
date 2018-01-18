@@ -10,58 +10,59 @@ import 'package:jean/util/hand_distribution.dart';
 class PIGame {
   static Random RANDOM = new Random();
 
-  int deckSize;
-  List<Card> unknownCards;
-  ImmutableScoringMat scoringMat;
-  PIHand activeHand;
+  final int deckSize;
+  final List<Card> unknownCards;
+  final ImmutableScoringMat scoringMat;
+  final ImmutableHand activeHand;
   HandDistribution opponentHandDistribution;
   int opponentHandSize;
-  ImmutableDiscard discard;
+  final ImmutableDiscard discard;
 
-  Player activePlayer;
-  TurnState turnState;
+  final Player activePlayer;
+  final TurnState turnState;
 
-  PIGame.fromGame(Game game) {
-    deckSize = game.deck.cards.length;
-    unknownCards = [];
-    unknownCards.addAll(game.deck.cards);
-    activePlayer = game.activePlayer;
-    if (activePlayer == Player.Human) {
-      activeHand = new PIHand(game.humanHand.cards);
-      unknownCards.addAll(game.computerHand.cards);
-    } else {
-      activeHand = new PIHand(game.computerHand.cards);
-      unknownCards.addAll(game.humanHand.cards);
-    }
+  PIGame.fromGame(Game game) :
+        deckSize = game.deck.cards.length,
+        activePlayer = game.activePlayer,
+        turnState = game.turnState,
+        scoringMat = new ImmutableScoringMat(game.scoringMat.groups
+            .map((sg) => new ImmutableScoredGroup(sg.cards))),
+        discard = new ImmutableDiscard(game.discard.cards),
+        unknownCards = new List.unmodifiable(PIGame.getUnknownCards(game)),
+        activeHand = PIGame.getActiveHand(game),
+        opponentHandSize = PIGame.getOpponentHandSize(game)
+  {
     opponentHandDistribution = new HandDistribution.uniform(unknownCards);
-    opponentHandSize = unknownCards.length - deckSize;
-    discard = new ImmutableDiscard(game.discard.cards);
-
-    scoringMat = new ImmutableScoringMat(
-      game.scoringMat.groups.map((sg) => new ImmutableScoredGroup(sg.cards)));
-
-    turnState = game.turnState;
+//    print("unknown cards: ${unknownCards.length}. " +
+//        "deck size: ${game.deck.cards.length}. " +
+//        "humanHand: ${game.humanHand.cards.length}. " +
+//        "computerHand: ${game.computerHand.cards.length}. "
+//        "discard: ${discard.cards.length}. " +
+//        "scored: ${scoringMat.playedCards()}");
+    validate();
   }
 
-  PIGame(
-      this.deckSize,
-      this.unknownCards,
+  PIGame(this.deckSize,
+      List<Card> unknownCards,
       this.scoringMat,
       this.activeHand,
       this.opponentHandDistribution,
       this.opponentHandSize,
       this.discard,
       this.activePlayer,
-      this.turnState) {
+      this.turnState) :
+      unknownCards = new List.unmodifiable(unknownCards)
+  {
+    validate();
+  }
+
+  void validate() {
     if (this.unknownCards.length != this.deckSize + this.opponentHandSize) {
       throw new Exception("unknown cards mismatch");
     }
-//    print("unknown cards: ${unknownCards.length}. " +
-//        "activehand: ${activeHand.cards.length}. discard: ${discard.cards.length} " +
-//        "scored: ${scoringMat.playedCards()}");
     if (this.unknownCards.length !=
         52 - this.scoringMat.playedCards() - this.activeHand.cards.length
-    - this.discard.cards.length) {
+            - this.discard.cards.length) {
       throw new Exception("known cards mismatch");
     }
     if (this.unknownCards.any((c) => this.activeHand.cards.contains(c))) {
@@ -69,10 +70,40 @@ class PIGame {
     }
   }
 
+  static List<Card> getUnknownCards(Game game) {
+    List<Card> unknownCards = [];
+    unknownCards.addAll(game.deck.cards);
+    if (game.activePlayer == Player.Human) {
+      unknownCards.addAll(game.computerHand.cards);
+    } else {
+      unknownCards.addAll(game.humanHand.cards);
+    }
+    return unknownCards;
+  }
+
+  static ImmutableHand getActiveHand(Game game) {
+    if (game.activePlayer == Player.Human) {
+      return new ImmutableHand(game.humanHand.cards);
+    } else {
+      return new ImmutableHand(game.computerHand.cards);
+    }
+  }
+
+  static int getOpponentHandSize(Game game) {
+    if (game.activePlayer == Player.Human) {
+      return game.computerHand.cards.length;
+    } else {
+      return game.humanHand.cards.length;
+    }
+  }
+
   PIGame withDrawToActiveHand(Card card) {
-    PIHand newActiveHand = activeHand.withCards([card]);
+    ImmutableHand newActiveHand = activeHand.withCards([card]);
     List<Card> newUnknownCards = new List.from(unknownCards);
-    newUnknownCards.remove(card);
+    bool removed = newUnknownCards.remove(card);
+    if (!removed) {
+      throw new Exception("card was not an unknownCard");
+    }
     HandDistribution newOpponentHandDistribution =
         opponentHandDistribution.definitelyWithoutCard(card);
     return new PIGame(deckSize - 1, newUnknownCards, scoringMat, newActiveHand,
@@ -81,7 +112,7 @@ class PIGame {
   }
 
   PIGame withPickupToActiveHand(int pickupIndex) {
-    PIHand newActiveHand = activeHand.withCards(
+    ImmutableHand newActiveHand = activeHand.withCards(
         this.discard.cards.sublist(pickupIndex));
     ImmutableDiscard newDiscard = new ImmutableDiscard(
       this.discard.cards.sublist(0, pickupIndex));
@@ -91,7 +122,7 @@ class PIGame {
   }
 
   PIGame withPlayedGroupFromActiveHand(ScoredGroup group) {
-    PIHand newActiveHand = activeHand.withoutCards(group.cards
+    ImmutableHand newActiveHand = activeHand.withoutCards(group.cards
         .map((sc) => sc.card)
         .toList());
     ImmutableScoredGroup newGroup = new ImmutableScoredGroup(group.cards);
@@ -114,7 +145,7 @@ class PIGame {
      * The active hand in the next node is a reservoir sample of n of the
      * unknown cards, according to their weights.
      */
-    PIHand newActiveHand = new PIHand(opponentHandDistribution
+    ImmutableHand newActiveHand = new ImmutableHand(opponentHandDistribution
         .randomSample(unknownCards, opponentHandSize));
     if (newActiveHand.cards.length != opponentHandSize) {
       throw new Exception("ugh");
@@ -139,8 +170,9 @@ class PIGame {
 
   PIGame afterMove(Move move) {
     if (move is Draw) {
-      this.unknownCards.shuffle(RANDOM);
-      return withDrawToActiveHand(this.unknownCards[0]);
+      List<Card> unknownCards = new List.from(this.unknownCards);
+      unknownCards.shuffle(RANDOM);
+      return withDrawToActiveHand(unknownCards[0]);
     } else if (move is Pickup) {
       return withPickupToActiveHand(move.fromIndex);
     } else if (move is Play) {
@@ -179,43 +211,51 @@ class ImmutableDiscard {
   }
 }
 
-class PIHand {
+class ImmutableHand {
   final List<Card> cards;
 
-  PIHand(this.cards);
+  ImmutableHand(List<Card> cards) :
+        this.cards = new List.unmodifiable(cards);
 
-  PIHand withCards(List<Card> cards) {
+  ImmutableHand withCards(List<Card> cards) {
+    for (Card card in cards) {
+      if (this.cards.contains(card)) {
+        throw new Exception("Hand already contains ${card}");
+      }
+    }
     List<Card> newCards = new List.from(this.cards);
     newCards.addAll(cards);
-    return new PIHand(newCards);
+    return new ImmutableHand(newCards);
   }
 
-  PIHand withoutCards(List<Card> cards) {
+  ImmutableHand withoutCards(List<Card> cards) {
     List<Card> newCards = new List.from(this.cards);
     cards.forEach((c) => newCards.remove(c));
-    return new PIHand(newCards);
+    return new ImmutableHand(newCards);
   }
 }
 
-class PIDeck {
+class ImmutableDeck {
   final List<Card> cards;
 
-  PIDeck(this.cards);
+  ImmutableDeck(List<Card> cards) :
+        this.cards = new List.unmodifiable(cards);
 
-  PIDeck withoutCard(Card card) {
+  ImmutableDeck withoutCard(Card card) {
     if (!this.cards.contains(card)) {
-      throw new Error();
+      throw new Exception("deck does not contains card ${card}");
     }
     List<Card> newCards = new List.from(this.cards);
     newCards.remove(card);
-    return new PIDeck(newCards);
+    return new ImmutableDeck(newCards);
   }
 }
 
 class ImmutableScoringMat {
   final List<ImmutableScoredGroup> groups;
 
-  ImmutableScoringMat(this.groups);
+  ImmutableScoringMat(List<ImmutableScoredGroup> groups) :
+      groups = new List.unmodifiable(groups);
 
   ImmutableScoringMat withGroup(ImmutableScoredGroup group) {
     List<ImmutableScoredGroup> newGroups = new List.from(groups);

@@ -4,10 +4,11 @@ import 'package:jean/game.dart';
 import 'package:jean/mcts/immutable/immutable_game.dart';
 import 'package:jean/mcts/node.dart';
 import 'package:jean/mcts/pimc.dart';
+import 'package:jean/player.dart';
+import 'package:jean/scored_group.dart';
 
-/**
- * MCTS for the perfect-information possible world
- */
+int drawCount = 0;
+
 class MonteCarlo {
   PIGame game;
   Node rootNode;
@@ -16,14 +17,17 @@ class MonteCarlo {
     this.rootNode = new Node("root", this.game.activePlayer);
   }
 
-  void notify(Move move) {
-    // TODO(jack) the bug is here. this is non-deterministic.
-    this.game = game.afterMove(move);
+  void notify(Game game, Move move) {
+    this.game = new PIGame.fromGame(game);
     this.rootNode = rootNode.nodeFromMove(move);
   }
 
   Move bestMove() {
     int count = 0;
+
+    if (this.game.turnState == TurnState.Play && this.game.activePlayer == Player.Computer) {
+      print("valid groups: ${allValidGroups(this.game.activeHand.cards, Player.Computer, true)}");
+    }
 
     while (rootNode.unvisitedLegalMoves(this.game).isNotEmpty ||
         count++ < 150) {
@@ -73,6 +77,6 @@ class MonteCarlo {
 
 //    print(rootNode.toJson());
 
-    return rootNode.bestMove();
+    return rootNode.bestMove(legalMoves(this.game));
   }
 }

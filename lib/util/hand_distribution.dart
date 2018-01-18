@@ -31,7 +31,7 @@ class HandDistribution {
       }
       return keys[c1] < keys[c2] ? -1 : 1;
     });
-    return pool.sublist(0, n);
+    return new List.from(pool.sublist(0, n));
   }
 
   HandDistribution definitelyWithoutCard(Card card) {

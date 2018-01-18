@@ -14,7 +14,7 @@ import 'package:jean/scoring_mat.dart';
 
 typedef void Undo();
 
-const int STARTING_HAND_SIZE = 4;
+const int STARTING_HAND_SIZE = 7;
 
 class Game {
   Deck deck;
@@ -55,8 +55,6 @@ class Game {
   }
 
   void handleMove(Move move) {
-    moves.add(move);
-    monteCarlo.notify(move);
     if (turnState == TurnState.Draw) {
       handleDrawMove(move);
     } else if (turnState == TurnState.Play) {
@@ -64,9 +62,9 @@ class Game {
     } else if (turnState == TurnState.Discard) {
       handleDiscardMove(move);
     }
-    print("TurnState: ${turnState}, Player: ${activePlayer}");
+    moves.add(move);
+    monteCarlo.notify(this, move);
     if (activePlayer == Player.Computer) {
-      print("AI");
       handleMove(monteCarlo.bestMove());
     }
   }
@@ -77,10 +75,10 @@ class Game {
     } else if (move is Pickup) {
       num fromIndex = move.fromIndex;
       pickupDiscard(discard.pickUpTill(fromIndex));
-      turnState = TurnState.Play;
     } else {
       throw new Exception("invalid move instance for TurnState.Draw: ${move}");
     }
+    turnState = TurnState.Play;
   }
 
   void handlePlayMove(Move move) {
@@ -97,7 +95,15 @@ class Game {
 
   void handleDiscardMove(Move move) {
     if (move is Discard) {
+      if (!activeHand.cards.contains(move.card)) {
+        throw new Exception("cannot discard a card you do not hold");
+      }
+      int size = activeHand.cards.length;
       activeHand.removeCard(move.card);
+      int newSize = activeHand.cards.length;
+      if (newSize != size - 1) {
+        throw new Exception("weird discard");
+      }
       discard.discard(move.card);
       turnState = TurnState.Draw;
       endTurn();
@@ -113,7 +119,6 @@ class Game {
       activeHand.removeCard(card);
       deck.cards.add(card);
     };
-    turnState = TurnState.Play;
   }
 
   void pickupDiscard(List<Card> cards) {

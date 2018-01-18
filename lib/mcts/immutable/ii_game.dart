@@ -9,7 +9,7 @@ class IIGame {
   int opponentHandSize;
   
   ImmutableScoringMat scoringMat;
-  PIHand myHand;
+  ImmutableHand myHand;
   ImmutableDiscard discard;
 
   Player player;
@@ -30,7 +30,7 @@ class IIGame {
     unknownCards.addAll(game.deck.cards);
     deckSize = game.deck.cards.length;
     humanHandSize = game.humanHand.cards.length;
-    computerHand = new PIHand(new List.from(game.computerHand.cards));
+    computerHand = new ImmutableHand(new List.from(game.computerHand.cards));
     discard = new ImmutableDiscard(
         new List.from(game.discard.cards));
     player = game.activePlayer;
@@ -43,9 +43,9 @@ class IIGame {
   PIGame sample() {
     unknownCards.shuffle();
     return new PIGame(
-        new PIDeck(unknownCards.sublist(0, deckSize)),
+        new ImmutableDeck(unknownCards.sublist(0, deckSize)),
         scoringMat,
-        new PIHand(unknownCards.sublist(deckSize, unknownCards.length)),
+        new ImmutableHand(unknownCards.sublist(deckSize, unknownCards.length)),
         computerHand,
         discard,
         player,

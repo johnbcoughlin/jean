@@ -53,10 +53,10 @@ class Node {
     return children[move];
   }
 
-  Move bestMove() {
+  Move bestMove(List<Move> legalMoves) {
     num bestScore = 0.0;
     Move bestMove = null;
-    for (Move move in children.keys) {
+    for (Move move in legalMoves) {
       Node node = children[move];
       num score = node.wins / node.visits;
       if (score >= bestScore) {
@@ -120,10 +120,7 @@ List<Move> legalDrawMoves(PIGame game) {
 List<Move> legalPlayMoves(PIGame game) {
   List<Move> moves = [new FinishPlay()];
   List<ScoredGroup> validGroups = allValidGroups(game.activeHand.cards,
-      game.activePlayer);
-  if (game.activePlayer == Player.Human) {
-//    print("active hand cards: ${game.activeHand.cards}");
-  }
+      game.activePlayer, false);
   validGroups.forEach((group) => moves.add(new Play(group)));
   return moves;
 }

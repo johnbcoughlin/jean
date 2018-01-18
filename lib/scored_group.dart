@@ -68,16 +68,16 @@ class Run extends ScoredGroup {
   }
 }
 
-const int RUN_MIN_LENGTH = 3;
+const int RUN_MIN_LENGTH = 2;
 
 bool validRun(List<Card> cards) {
   int k = cards.length;
   if (k < RUN_MIN_LENGTH) {
     return false;
   }
-//  if (cards.map((c) => c.suit).toSet().length != 1) {
-//    return false;
-//  }
+  if (cards.map((c) => c.suit).toSet().length != 1) {
+    return false;
+  }
   if (cards
       .map((c) => c.ordinal)
       .toSet()
@@ -91,11 +91,11 @@ bool validRun(List<Card> cards) {
     return true;
   }
 //  // ace on the top
-//  if (ordinals[0] == Ordinal.ace && ordinals[k - 1] == Ordinal.king) {
-//    if (ordinals[k - 1].index - ordinals[1].index == k - 2) {
-//      return true;
-//    }
-//  }
+  if (ordinals[0] == Ordinal.ace && ordinals[k - 1] == Ordinal.king) {
+    if (ordinals[k - 1].index - ordinals[1].index == k - 2) {
+      return true;
+    }
+  }
   return false;
 }
 
@@ -109,11 +109,11 @@ class ScoredCard {
     switch (card.ordinal) {
       case Ordinal.ace:
         return 15;
-//      case Ordinal.ten:
-//      case Ordinal.jack:
-//      case Ordinal.queen:
-//      case Ordinal.king:
-//        return 10;
+      case Ordinal.ten:
+      case Ordinal.jack:
+      case Ordinal.queen:
+      case Ordinal.king:
+        return 10;
       default:
         return 5;
     }
@@ -130,13 +130,16 @@ enum GroupType {
   Kind
 }
 
-List<ScoredGroup> allValidGroups(List<Card> cards, Player player) {
+List<ScoredGroup> allValidGroups(List<Card> cards, Player player, bool debug) {
   List<ScoredGroup> result = [];
 
   // do the runs first
   // first copy the list and sort by ordinal
   List<Card> copy = new List.from(cards);
   copy.sort((c1, c2) => c1.ordinal.index - c2.ordinal.index);
+  if (debug) {
+    print(copy);
+  }
   // add aces to the top
   for (Card card in cards) {
     if (card.ordinal == Ordinal.ace) {
@@ -144,17 +147,24 @@ List<ScoredGroup> allValidGroups(List<Card> cards, Player player) {
     }
   }
 
-  for (int i = 0; i < copy.length - RUN_MIN_LENGTH; i++) {
+  for (int i = 0; i <= copy.length - RUN_MIN_LENGTH; i++) {
     List<Card> sublist = copy.sublist(i, i + RUN_MIN_LENGTH);
     if (validRun(sublist)) {
       result.add(new Run(sublist, player));
     }
   }
 
-  Map<Suit, List<Card>> bySuit = {
-    Suit.spades: [], Suit.hearts: [], Suit.diamonds: [], Suit.clubs: []
-  };
-  copy.forEach((c) => bySuit[c.suit].add(c));
+  for (int i = 0; i < copy.length - OF_A_KIND_MINIMUM; i++) {
+    List<Card> sublist = copy.sublist(i, i + OF_A_KIND_MINIMUM);
+    if (validOfAKind(sublist)) {
+      if (debug) {
+        print("${sublist} is a valid ofAKind");
+      }
+      result.add(new OfAKind(sublist, player));
+    } else if (debug) {
+      print("${sublist} is not a valid ofAKind");
+    }
+  }
 
   return result;
 }

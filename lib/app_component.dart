@@ -63,6 +63,7 @@ import "player.dart";
     ]
 )
 class AppComponent implements OnInit {
+  bool inited = false;
   Game game;
   final Player human = Player.Human;
   final Player computer = Player.Computer;
@@ -71,15 +72,24 @@ class AppComponent implements OnInit {
   final TurnState discard = TurnState.Discard;
 
   void ngOnInit() {
+    print("on init");
+    print(this.hashCode);
+    if (inited) {
+      print("bailing");
+      return;
+    }
+    inited = true;
     game = new Game();
-    game.setup();
-  }
-
-  void onUndo() {
-    game.undo();
+    try {
+      game.setup();
+    } catch (e) {
+      print("there was a problem: ${e}");
+      throw e;
+    }
   }
 
   void onMove(Move move) {
+    print("move came from me");
     print(move);
     game.handleMove(move);
   }
